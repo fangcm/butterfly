@@ -2,14 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
-       http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd
        http://www.springframework.org/schema/data/jpa
        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
        http://www.springframework.org/schema/tx
@@ -19,10 +17,6 @@
     <!--其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载-->
     <context:property-placeholder location="classpath:mysql.properties" ignore-unresolvable="true"/>
     <!-- 加载资源文件 end-->
-
-    <!--AOP自动代理 监听 start 只对当前配置文件有效-->
-    <aop:aspectj-autoproxy expose-proxy="true"/>
-    <!--AOP自动代理 监听 end-->
 
     <!-- druid数据源 start-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
@@ -55,11 +49,11 @@
 
     <!--JPA配置-->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <!--<property name="persistenceUnitName" value="demo"/>-->
         <property name="dataSource" ref="dataSource"/>
-        <property name="persistenceUnitName" value="demo"/>
-        <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
-        <property name="packagesToScan" value="org.jaden.jpa.**.entity"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="packagesToScan" value="com.fangcm.modules.**.entity"/>
         <!--待扫描的实体类包，不再需要persistence.xml了-->
         <property name="jpaProperties">
             <props>
@@ -72,20 +66,6 @@
         </property>
     </bean>
 
-
-    <!--指定实现JPA的适配器 start-->
-    <bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-        <property name="databasePlatform" value="${databasePlatform}"/>
-    </bean>
-    <!--指定实现JPA的适配器 end-->
-
-    <!--指定JPA仓库扫描 start-->
-    <jpa:repositories base-package="org.jaden.jpa.**.repository"
-                      repository-impl-postfix="Impl"
-                      transaction-manager-ref="transactionManager"
-                      entity-manager-factory-ref="entityManagerFactory"/>
-    <!--指定JPA仓库扫描 end-->
-
     <!-- Jpa事务管理器 start-->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
@@ -93,29 +73,14 @@
     <!-- Jpa事务管理器 end-->
 
 
-    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
-        <!-- 配置详细事务处理语义 -->
-        <tx:attributes>
-            <tx:method name="add*" propagation="REQUIRED"/>
-            <tx:method name="save*" propagation="REQUIRED"/>
-            <tx:method name="insert*" propagation="REQUIRED"/>
-            <tx:method name="del*" propagation="REQUIRED"/>
-            <tx:method name="update*" propagation="REQUIRED"/>
-            <tx:method name="new*" propagation="REQUIRED"/>
+    <!-- 配置基于注解的声明式事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
-            <tx:method name="get*" read-only="true" propagation="REQUIRED"/>
-            <tx:method name="query*" read-only="true" propagation="REQUIRED"/>
-            <tx:method name="find*" read-only="true" propagation="REQUIRED"/>
 
-            <tx:method name="*" propagation="SUPPORTS"/>
-            <tx:method name="*" rollback-for="Exception"/>
-        </tx:attributes>
-    </tx:advice>
-
-    <aop:config expose-proxy="true" proxy-target-class="true">
-        <aop:pointcut id="transactionPointcut"
-                      expression="execution(* org.jaden..service..*.*(..))"/>  <!--execution(* com.openmgr..service..*.*(..))-->
-        <aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
-    </aop:config>
+    <!--指定JPA仓库扫描 start-->
+    <jpa:repositories base-package="com.fangcm.modules.**.dao"
+                      transaction-manager-ref="transactionManager"
+                      entity-manager-factory-ref="entityManagerFactory"/>
+    <!--指定JPA仓库扫描 end-->
 
 </beans>
