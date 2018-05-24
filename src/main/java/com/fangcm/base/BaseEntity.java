@@ -26,23 +26,23 @@ public abstract class BaseEntity implements Serializable {
     @Id
     private String id;
 
-    @Column(name = "create_by")
-    private String createBy;  //创建者
-
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "create_time")
     private Date createTime; //创建时间
 
-    @Column(name = "update_by")
-    private String updateBy; //更新者
+    @Column(name = "create_by")
+    private String createBy;  //创建者
 
     @LastModifiedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "update_time")
     private Date updateTime; //更新时间
+
+    @Column(name = "update_by")
+    private String updateBy; //更新者
 
     @Column(name = "del_flag")
     private Integer delFlag = CommonConstant.DEL_FLAG_NORMAL; //删除标志 默认0

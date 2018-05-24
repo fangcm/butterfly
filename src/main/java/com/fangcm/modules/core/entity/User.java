@@ -1,4 +1,4 @@
-package com.fangcm.modules.demo.entity;
+package com.fangcm.modules.core.entity;
 
 import com.fangcm.base.BaseEntity;
 import com.fangcm.common.constant.CommonConstant;
@@ -6,7 +6,9 @@ import com.fangcm.common.constant.CommonConstant;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 /**
  * Created by FangCM on 2018/5/23.
@@ -26,11 +28,14 @@ public class User extends BaseEntity {
     private String password;
     private String email;
 
-    @Column(name = "nick_name", length = 32)
+    @Column(length = 32)
     private String nickName;
     private Integer type = CommonConstant.USER_TYPE_NORMAL; //用户类型 0普通用户 1管理员
     private Integer status = CommonConstant.USER_STATUS_NORMAL; //状态 0正常 1禁用
     private String remarks;
+
+    @Transient
+    private List<Role> roles; //用户拥有角色
 
 
     public String getMobile() {
@@ -87,5 +92,13 @@ public class User extends BaseEntity {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
