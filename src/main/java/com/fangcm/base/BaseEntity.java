@@ -29,10 +29,10 @@ public abstract class BaseEntity implements Serializable {
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "create_time")
+    @Column(name = "create_time", updatable = false)
     private Date createTime; //创建时间
 
-    @Column(name = "create_by")
+    @Column(name = "create_by", updatable = false)
     private String createBy;  //创建者
 
     @LastModifiedDate

@@ -16,7 +16,6 @@ import java.util.List;
 @Transactional
 public class MenuService implements BaseService<Menu, String> {
 
-
     @Autowired
     private MenuDao menuDao;
 
@@ -25,13 +24,16 @@ public class MenuService implements BaseService<Menu, String> {
         return menuDao;
     }
 
-    public List<Menu> findByParent(Boolean parent) {
 
-        return menuDao.findByParent(parent);
+    @Override
+    public List<Menu> findAll() {
+
+        List<Menu> list = menuDao.findRootLevel();
+        for (Menu menu : list) {
+            List<Menu> children = menuDao.findByParentId(menu.getId());
+            menu.setChildren(children);
+        }
+        return list;
     }
 
-    public List<Menu> findByParentId(String parentId) {
-
-        return menuDao.findByParentId(parentId);
-    }
 }

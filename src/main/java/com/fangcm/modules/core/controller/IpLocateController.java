@@ -15,14 +15,12 @@ import javax.servlet.http.HttpServletRequest;
  */
 //IP接口
 @RestController
-@RequestMapping("/common/ip")
+@RequestMapping("/core/ip")
 public class IpLocateController {
 
     //IP及天气相关信息
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     public Result<Object> upload(HttpServletRequest request) {
-
-        String result = IpInfoUtil.getIpInfo(IpInfoUtil.getIpAddr(request));
-        return new ResultUtil<Object>().setData(result);
+        return new ResultUtil<Object>().setData(IpInfoUtil.getIpInfo(IpInfoUtil.getIpAddr(request)));
     }
 }

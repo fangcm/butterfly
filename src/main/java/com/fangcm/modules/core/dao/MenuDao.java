@@ -2,6 +2,7 @@ package com.fangcm.modules.core.dao;
 
 import com.fangcm.base.BaseDao;
 import com.fangcm.modules.core.entity.Menu;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -13,12 +14,14 @@ import java.util.List;
 public interface MenuDao extends BaseDao<Menu, String> {
 
     /**
-     * 获取一级菜单
+     * 获取根级菜单
      */
-    List<Menu> findByParent(Boolean parent);
+    @Query("select m from Menu m where m.rootLevel=true AND m.delFlag=0 order by m.sort asc")
+    List<Menu> findRootLevel();
 
     /**
      * 通过parendId查找
      */
+    @Query("select m from Menu m where m.parentId=?1 AND m.delFlag=0 order by m.sort asc")
     List<Menu> findByParentId(String parentId);
 }

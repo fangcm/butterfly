@@ -17,7 +17,7 @@ import java.util.List;
 //菜单管理接口
 //拥有ROLE_ADMIN角色的用户可以访问
 @RestController
-@RequestMapping("/menu")
+@RequestMapping("/core/menu")
 public class MenuController {
 
     @Autowired
@@ -25,43 +25,23 @@ public class MenuController {
 
 
     //获取数据
-    @RequestMapping(value = "/getAllList", method = RequestMethod.GET)
-    public Result<List<Menu>> getAllList() {
-
-        List<Menu> list = menuService.findByParent(true);
-        for (Menu menu : list) {
-            List<Menu> children = menuService.findByParentId(menu.getId());
-            menu.setChildren(children);
-        }
-        return new ResultUtil<List<Menu>>().setData(list);
+    @RequestMapping(value = "/findAll", method = RequestMethod.GET)
+    public Result<List<Menu>> findAll() {
+        return new ResultUtil<List<Menu>>().setData(menuService.findAll());
     }
 
-    //添加
+    //添加 or 编辑
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Result<Menu> add(@ModelAttribute Menu menu) {
-
-        Menu u = menuService.save(menu);
-        return new ResultUtil<Menu>().setData(u);
-    }
-
-    //编辑
-    @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public Result<Menu> edit(@ModelAttribute Menu menu) {
-
-        Menu u = menuService.update(menu);
-        return new ResultUtil<Menu>().setData(u);
+        return new ResultUtil<Menu>().setData(menuService.save(menu));
     }
 
     //批量通过id删除
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/delByIds", method = RequestMethod.DELETE)
     public Result<Object> delByIds(@RequestParam String[] ids) {
-
-        for (String id : ids) {
-            menuService.delete(id);
-        }
+        menuService.delByIds(ids);
         return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
     }
 

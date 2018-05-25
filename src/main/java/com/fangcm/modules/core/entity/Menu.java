@@ -2,9 +2,11 @@ package com.fangcm.modules.core.entity;
 
 import com.fangcm.base.BaseEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 
@@ -12,22 +14,30 @@ import java.util.List;
  * Created by FangCM on 2018/5/24.
  */
 @Entity
-@Table(name = "t_menu")
+@Table(name = "sys_menu")
 public class Menu extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    private String name; //菜单名
+    @NotEmpty
+    @Column(length = 64)
+    private String name; //菜单名称
+
+    @NotEmpty
+    @Column(length = 64)
     private String title; //标题
+
     private String icon; //图标
     private String path; //路径
     private String component; //前端组件
-    private Boolean parent; //是否为一级菜单
+    private Boolean rootLevel; //是否为根级菜单
     private String parentId; //父菜单id
     private Integer access; //所需权限值
+    private Integer sort; //排序（升序）
 
     @Transient
     private List<Menu> children; //二级菜单
+
 
     public String getName() {
         return name;
@@ -69,12 +79,12 @@ public class Menu extends BaseEntity {
         this.component = component;
     }
 
-    public Boolean getParent() {
-        return parent;
+    public Boolean getRootLevel() {
+        return rootLevel;
     }
 
-    public void setParent(Boolean parent) {
-        this.parent = parent;
+    public void setRootLevel(Boolean rootLevel) {
+        this.rootLevel = rootLevel;
     }
 
     public String getParentId() {
@@ -91,6 +101,14 @@ public class Menu extends BaseEntity {
 
     public void setAccess(Integer access) {
         this.access = access;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     public List<Menu> getChildren() {

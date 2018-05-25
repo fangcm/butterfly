@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "t_user")
+@Table(name = "sys_user")
 public class User extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -24,13 +24,12 @@ public class User extends BaseEntity {
     private String mobile;
 
     @NotEmpty
-    @Column(length = 32)
+    @Column(length = 100)
     private String password;
     private String email;
 
     @Column(length = 32)
     private String nickName;
-    private Integer type = CommonConstant.USER_TYPE_NORMAL; //用户类型 0普通用户 1管理员
     private Integer status = CommonConstant.USER_STATUS_NORMAL; //状态 0正常 1禁用
     private String remarks;
 
@@ -68,14 +67,6 @@ public class User extends BaseEntity {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
     }
 
     public Integer getStatus() {

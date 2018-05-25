@@ -9,7 +9,7 @@ import javax.persistence.Table;
  * Created by FangCM on 2018/5/24.
  */
 @Entity
-@Table(name = "t_role")
+@Table(name = "sys_role")
 public class Role extends BaseEntity {
 
     private static final long serialVersionUID = 1L;

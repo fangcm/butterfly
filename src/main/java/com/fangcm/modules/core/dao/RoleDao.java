@@ -3,7 +3,6 @@ package com.fangcm.modules.core.dao;
 import com.fangcm.base.BaseDao;
 import com.fangcm.modules.core.entity.Role;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -13,16 +12,12 @@ import java.util.List;
 
 
 public interface RoleDao extends BaseDao<Role, String> {
-    /**
-     * 获取默认角色
-     */
-    List<Role> findByDefaultRole(Boolean defaultRole);
 
     /**
      * 通过userId查找
      */
 
-    @Query(value = "SELECT r FROM  Role r, UserRole ur WHERE r.id = ur.roleId AND ur.userId = :userId ")
-    List<Role> findByUserId(@Param("userId") String userId);
+    @Query(value = "SELECT r FROM  Role r, UserRole ur WHERE r.delFlag=0 AND r.id=ur.roleId AND ur.userId=?1 ")
+    List<Role> findByUserId(String userId);
 
 }

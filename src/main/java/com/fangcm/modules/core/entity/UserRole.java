@@ -10,7 +10,7 @@ import javax.persistence.Transient;
  * Created by FangCM on 2018/5/24.
  */
 @Entity
-@Table(name = "t_user_role")
+@Table(name = "sys_user_role")
 public class UserRole extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
