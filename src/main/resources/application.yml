@@ -7,15 +7,23 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/butterfly?useUnicode:true&characterEncoding:utf-8&useSSL:false
     username: root
     password: t1e2s3t4
-    driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    logSlowSql: true
 
   jpa:
+    database: MYSQL
     show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        format_sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+  redis:
+      host: 127.0.0.1
+      password:
+      # 数据库索引 默认0
+      database: 0
+      port: 6379
+      timeout: 3000
 
   servlet:
     multipart:

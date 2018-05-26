@@ -7,7 +7,6 @@
     <groupId>com.fangcm</groupId>
     <artifactId>butterfly</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
