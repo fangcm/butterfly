@@ -1,6 +1,7 @@
 package com.fangcm.config.security;
 
 import com.fangcm.common.utils.ResponseUtil;
+import com.fangcm.exception.LoginFailLimitException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
