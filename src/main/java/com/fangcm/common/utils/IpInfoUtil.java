@@ -1,5 +1,6 @@
 package com.fangcm.common.utils;
 
+import cn.hutool.http.HttpUtil;
 import com.fangcm.common.entity.IpLocate;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
@@ -73,14 +74,11 @@ public class IpInfoUtil {
      * @return
      */
     public static String getIpInfo(String ip) {
-        try {
-            if (StringUtils.isNotBlank(ip)) {
-                String url = GET_IP_WEATHER + ip;
-                String result = HttpUtil.doGet(url);
-                return result;
-            }
-        } catch (Exception e) {
-            logger.info("获取IP信息失败");
+
+        if (StringUtils.isNotBlank(ip)) {
+            String url = GET_IP_WEATHER + ip;
+            String result = HttpUtil.get(url);
+            return result;
         }
         return null;
     }
@@ -96,7 +94,7 @@ public class IpInfoUtil {
             String url = GET_IP_INFO + ip;
             String result = "未知";
             try {
-                String json = HttpUtil.doGet(url /*, 3000*/);
+                String json = HttpUtil.get(url, 3000);
                 IpLocate locate = new Gson().fromJson(json, IpLocate.class);
                 if (("200").equals(locate.getRetCode())) {
                     if (StringUtils.isNotBlank(locate.getResult().getProvince())) {

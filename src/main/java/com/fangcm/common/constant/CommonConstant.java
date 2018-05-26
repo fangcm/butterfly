@@ -35,4 +35,9 @@ public interface CommonConstant {
      */
     Integer DEL_FLAG_DELETE = 1;
 
+    /**
+     * 限流标识
+     */
+    String LIMIT_ALL = "LIMIT_ALL";
+
 }

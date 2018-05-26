@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  * IP接口
  * Created by FangCM on 2018/5/24.
  */
+
 @RestController
 @RequestMapping("/core/ip")
 public class IpLocateController {
