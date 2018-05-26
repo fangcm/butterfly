@@ -35,7 +35,7 @@ public class UserController {
     public Result<Object> register(@ModelAttribute User u,
                                    @RequestParam String verify,
                                    @RequestParam String captchaId) {
-        return new ResultUtil<Object>().setData(userService.save(u, verify, captchaId, null));
+        return new ResultUtil<Object>().setData(userService.save(u, null));
     }
 
 
@@ -44,7 +44,7 @@ public class UserController {
     @RequestMapping(value = "/editOwn", method = RequestMethod.POST)
     @RequiresAuthentication
     public Result<Object> editOwn(@ModelAttribute User u) {
-        userService.save(u, null, null, null);
+        userService.save(u, null);
         return new ResultUtil<Object>().setSuccessMsg("修改成功");
     }
 
@@ -56,7 +56,7 @@ public class UserController {
     @RequiresRoles("admin")
     public Result<Object> edit(@ModelAttribute User u,
                                @RequestParam(required = false) String[] roles) {
-        userService.save(u, null, null, roles);
+        userService.save(u, roles);
         return new ResultUtil<Object>().setSuccessMsg("修改成功");
     }
 
@@ -86,7 +86,7 @@ public class UserController {
     @RequiresRoles("admin")
     public Result<Object> register(@ModelAttribute User u,
                                    @RequestParam(required = false) String[] roles) {
-        return new ResultUtil<Object>().setData(userService.save(u, null, null, roles));
+        return new ResultUtil<Object>().setData(userService.save(u, roles));
     }
 
 

@@ -58,6 +58,9 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
+        }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         RateLimiter rateLimiter = method.getAnnotation(RateLimiter.class);
