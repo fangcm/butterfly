@@ -3,12 +3,13 @@ package com.fangcm.modules.core.dao;
 import com.fangcm.base.BaseDao;
 import com.fangcm.modules.core.entity.User;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by HEZY on 2018/5/23.
  */
 
-
+@Repository
 public interface UserDao extends BaseDao<User, String> {
     /**
      * 通过手机号和状态获取用户

@@ -25,7 +25,7 @@ public class MenuController {
 
 
     //获取数据
-    @RequestMapping(value = "/findAll", method = RequestMethod.GET)
+    @GetMapping("/findAll")
     public Result<List<Menu>> findAll() {
         return new ResultUtil<List<Menu>>().setData(menuService.findAll());
     }

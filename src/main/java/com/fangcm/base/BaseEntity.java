@@ -2,6 +2,8 @@ package com.fangcm.base;
 
 import com.fangcm.common.constant.CommonConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -10,7 +12,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * Created by FangCM on 2018/5/23.
@@ -18,18 +19,22 @@ import java.util.UUID;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"createTime", "createBy", "updateTime", "updateBy"},
+        allowGetters = true)
 public abstract class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     //唯一标识
     @Id
+    @GenericGenerator(name = "idGenerator", strategy = "uuid")
+    @GeneratedValue(generator = "idGenerator")
     private String id;
 
     @CreatedDate
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "create_time", updatable = false)
+    @Column(name = "create_time", nullable = false, updatable = false)
     private Date createTime; //创建时间
 
     @Column(name = "create_by", updatable = false)
@@ -46,18 +51,6 @@ public abstract class BaseEntity implements Serializable {
 
     @Column(name = "del_flag")
     private Integer delFlag = CommonConstant.DEL_FLAG_NORMAL; //删除标志 默认0
-
-    @PrePersist
-    public void prePersist() {
-        this.id = UUID.randomUUID().toString().replaceAll("-", "");
-        this.updateTime = new Date();
-        this.createTime = this.updateTime;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.updateTime = new Date();
-    }
 
     public String getId() {
         return id;

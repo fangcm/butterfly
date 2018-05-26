@@ -1,65 +1,65 @@
 CREATE TABLE `sys_user` (
   `id` varchar(32) NOT NULL COMMENT 'ID',
-  `mobile` varchar(11) NOT NULL COMMENT 'ÊÖ»ú',
-  `password` varchar(255) NOT NULL COMMENT 'ÃÜÂë',
-  `email` varchar(255) NOT NULL DEFAULT '' COMMENT 'ÓÊÏä',
-  `nick_name` varchar(32) NOT NULL DEFAULT '' COMMENT 'êÇ³Æ',
-  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '×´Ì¬ 0Õı³£ 1½ûÓÃ',
-  `remarks` varchar(255) NOT NULL DEFAULT '' COMMENT '±¸×¢ĞÅÏ¢',
-  `create_time` datetime DEFAULT NULL COMMENT '´´½¨Ê±¼ä',
-  `create_by` varchar(32) NOT NULL DEFAULT '' COMMENT '´´½¨Õß',
-  `update_time` datetime DEFAULT NULL COMMENT '¸üĞÂÊ±¼ä',
-  `update_by` varchar(32) NOT NULL DEFAULT '' COMMENT '¸üĞÂÕß',
-  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT 'É¾³ı±êÖ¾£¨0-Õı³££¬1-ÒÑÉ¾³ı£©',
+  `mobile` varchar(11) NOT NULL COMMENT 'æ‰‹æœº',
+  `password` varchar(255) NOT NULL COMMENT 'å¯†ç ',
+  `email` varchar(255) NOT NULL DEFAULT '' COMMENT 'é‚®ç®±',
+  `nick_name` varchar(32) NOT NULL DEFAULT '' COMMENT 'æ˜µç§°',
+  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT 'çŠ¶æ€ 0æ­£å¸¸ 1ç¦ç”¨',
+  `remarks` varchar(255) NOT NULL DEFAULT '' COMMENT 'å¤‡æ³¨ä¿¡æ¯',
+  `create_time` datetime DEFAULT NULL COMMENT 'åˆ›å»ºæ—¶é—´',
+  `create_by` varchar(32) NOT NULL DEFAULT '' COMMENT 'åˆ›å»ºè€…',
+  `update_time` datetime DEFAULT NULL COMMENT 'æ›´æ–°æ—¶é—´',
+  `update_by` varchar(32) NOT NULL DEFAULT '' COMMENT 'æ›´æ–°è€…',
+  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT 'åˆ é™¤æ ‡å¿—ï¼ˆ0-æ­£å¸¸ï¼Œ1-å·²åˆ é™¤ï¼‰',
   PRIMARY KEY (`id`),
   KEY `idx_mobile` (`mobile`,`del_flag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ÏµÍ³-ÓÃ»§ĞÅÏ¢±í';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ç³»ç»Ÿ-ç”¨æˆ·ä¿¡æ¯è¡¨';
 
 
 CREATE TABLE `sys_role` (
   `id` varchar(32) NOT NULL COMMENT 'ID',
-  `name` varchar(255) NOT NULL COMMENT '½ÇÉ«Ãû ÒÔROLE_¿ªÍ·',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '½ÇÉ«ÏÔÊ¾±êÌâ',
-  `access` int(11) NOT NULL DEFAULT '0' COMMENT '¶ÔÓ¦È¨ÏŞÖµ È¨ÏŞ²Ëµ¥ËùĞè',
-  `create_time` datetime DEFAULT NULL COMMENT '´´½¨Ê±¼ä',
-  `create_by` varchar(32) NOT NULL DEFAULT '' COMMENT '´´½¨Õß',
-  `update_time` datetime DEFAULT NULL COMMENT '¸üĞÂÊ±¼ä',
-  `update_by` varchar(32) NOT NULL DEFAULT '' COMMENT '¸üĞÂÕß',
-  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT 'É¾³ı±êÖ¾£¨0-Õı³££¬1-ÒÑÉ¾³ı£©',
+  `name` varchar(255) NOT NULL COMMENT 'è§’è‰²å ä»¥ROLE_å¼€å¤´',
+  `title` varchar(255) NOT NULL DEFAULT '' COMMENT 'è§’è‰²æ˜¾ç¤ºæ ‡é¢˜',
+  `access` int(11) NOT NULL DEFAULT '0' COMMENT 'å¯¹åº”æƒé™å€¼ æƒé™èœå•æ‰€éœ€',
+  `create_time` datetime DEFAULT NULL COMMENT 'åˆ›å»ºæ—¶é—´',
+  `create_by` varchar(32) NOT NULL DEFAULT '' COMMENT 'åˆ›å»ºè€…',
+  `update_time` datetime DEFAULT NULL COMMENT 'æ›´æ–°æ—¶é—´',
+  `update_by` varchar(32) NOT NULL DEFAULT '' COMMENT 'æ›´æ–°è€…',
+  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT 'åˆ é™¤æ ‡å¿—ï¼ˆ0-æ­£å¸¸ï¼Œ1-å·²åˆ é™¤ï¼‰',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ÏµÍ³-½ÇÉ«±í';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ç³»ç»Ÿ-è§’è‰²è¡¨';
 
 
 CREATE TABLE `sys_user_role` (
   `id` varchar(32) NOT NULL COMMENT 'ID',
-  `user_id` varchar(32) NOT NULL COMMENT 'ÓÃ»§ID',
-  `role_id` varchar(32) NOT NULL COMMENT '½ÇÉ«ID',
-  `create_time` datetime DEFAULT NULL COMMENT '´´½¨Ê±¼ä',
-  `create_by` varchar(32) NOT NULL DEFAULT '' COMMENT '´´½¨Õß',
-  `update_time` datetime DEFAULT NULL COMMENT '¸üĞÂÊ±¼ä',
-  `update_by` varchar(32) NOT NULL DEFAULT '' COMMENT '¸üĞÂÕß',
-  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT 'É¾³ı±êÖ¾£¨0-Õı³££¬1-ÒÑÉ¾³ı£©',
+  `user_id` varchar(32) NOT NULL COMMENT 'ç”¨æˆ·ID',
+  `role_id` varchar(32) NOT NULL COMMENT 'è§’è‰²ID',
+  `create_time` datetime DEFAULT NULL COMMENT 'åˆ›å»ºæ—¶é—´',
+  `create_by` varchar(32) NOT NULL DEFAULT '' COMMENT 'åˆ›å»ºè€…',
+  `update_time` datetime DEFAULT NULL COMMENT 'æ›´æ–°æ—¶é—´',
+  `update_by` varchar(32) NOT NULL DEFAULT '' COMMENT 'æ›´æ–°è€…',
+  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT 'åˆ é™¤æ ‡å¿—ï¼ˆ0-æ­£å¸¸ï¼Œ1-å·²åˆ é™¤ï¼‰',
   PRIMARY KEY (`id`),
   KEY `idx_userId_roleId` (`user_id`,`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ÏµÍ³-ÓÃ»§½ÇÉ«±í';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ç³»ç»Ÿ-ç”¨æˆ·è§’è‰²è¡¨';
 
 
 CREATE TABLE `sys_menu` (
   `id` varchar(32) NOT NULL COMMENT 'ID',
-  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '²Ëµ¥Ãû³Æ',
-  `title` varchar(64) NOT NULL DEFAULT '' COMMENT '±êÌâ',
-  `icon` varchar(255) NOT NULL DEFAULT '' COMMENT 'Í¼±ê',
-  `path` varchar(255) NOT NULL DEFAULT '' COMMENT 'Â·¾¶',
-  `component` varchar(255) NOT NULL DEFAULT '' COMMENT 'Ç°¶Ë×é¼ş',
-  `root_level` bit(1) NOT NULL DEFAULT b'0' COMMENT '¸ù¼¶²Ëµ¥',
-  `parent_id` varchar(32) NOT NULL DEFAULT '' COMMENT '¸¸²Ëµ¥ID',
-  `access` int(11) NOT NULL DEFAULT '0' COMMENT 'ËùĞèÈ¨ÏŞÖµ',
-  `sort` int(11) NOT NULL DEFAULT '0' COMMENT 'ÅÅĞò£¨ÉıĞò£©',
-  `create_time` datetime DEFAULT NULL COMMENT '´´½¨Ê±¼ä',
-  `create_by` varchar(32) NOT NULL DEFAULT '' COMMENT '´´½¨Õß',
-  `update_time` datetime DEFAULT NULL COMMENT '¸üĞÂÊ±¼ä',
-  `update_by` varchar(32) NOT NULL DEFAULT '' COMMENT '¸üĞÂÕß',
-  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT 'É¾³ı±êÖ¾£¨0-Õı³££¬1-ÒÑÉ¾³ı£©',
+  `name` varchar(64) NOT NULL DEFAULT '' COMMENT 'èœå•åç§°',
+  `title` varchar(64) NOT NULL DEFAULT '' COMMENT 'æ ‡é¢˜',
+  `icon` varchar(255) NOT NULL DEFAULT '' COMMENT 'å›¾æ ‡',
+  `path` varchar(255) NOT NULL DEFAULT '' COMMENT 'è·¯å¾„',
+  `component` varchar(255) NOT NULL DEFAULT '' COMMENT 'å‰ç«¯ç»„ä»¶',
+  `root_level` bit(1) NOT NULL DEFAULT b'0' COMMENT 'æ ¹çº§èœå•',
+  `parent_id` varchar(32) NOT NULL DEFAULT '' COMMENT 'çˆ¶èœå•ID',
+  `access` int(11) NOT NULL DEFAULT '0' COMMENT 'æ‰€éœ€æƒé™å€¼',
+  `sort` int(11) NOT NULL DEFAULT '0' COMMENT 'æ’åºï¼ˆå‡åºï¼‰',
+  `create_time` datetime DEFAULT NULL COMMENT 'åˆ›å»ºæ—¶é—´',
+  `create_by` varchar(32) NOT NULL DEFAULT '' COMMENT 'åˆ›å»ºè€…',
+  `update_time` datetime DEFAULT NULL COMMENT 'æ›´æ–°æ—¶é—´',
+  `update_by` varchar(32) NOT NULL DEFAULT '' COMMENT 'æ›´æ–°è€…',
+  `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT 'åˆ é™¤æ ‡å¿—ï¼ˆ0-æ­£å¸¸ï¼Œ1-å·²åˆ é™¤ï¼‰',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ÏµÍ³-²Ëµ¥±í';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ç³»ç»Ÿ-èœå•è¡¨';
 

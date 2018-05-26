@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 
@@ -19,11 +19,11 @@ public class Menu extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @NotEmpty
+    @NotBlank
     @Column(length = 64)
     private String name; //菜单名称
 
-    @NotEmpty
+    @NotBlank
     @Column(length = 64)
     private String title; //标题
 
