@@ -22,6 +22,6 @@ public class IpLocateController {
     //IP及天气相关信息
     @GetMapping("/info")
     public Result<Object> upload(HttpServletRequest request) {
-        return new ResultUtil<Object>().setData(IpInfoUtil.getIpInfo(IpInfoUtil.getIpAddr(request)));
+        return new ResultUtil<Object>().setData(IpInfoUtil.getIpAddr(request));
     }
 }

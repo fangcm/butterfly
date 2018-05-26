@@ -27,7 +27,7 @@ public abstract class BaseEntity implements Serializable {
 
     //唯一标识
     @Id
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
+    @GenericGenerator(name = "idGenerator", strategy = "org.hibernate.id.UUIDGenerator")
     @GeneratedValue(generator = "idGenerator")
     private String id;
 

@@ -30,14 +30,6 @@ public class UserController {
         return new ResultUtil<User>().setData(userService.getCurrentUserInfo());
     }
 
-    //注册用户
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public Result<Object> register(@ModelAttribute User u,
-                                   @RequestParam String verify,
-                                   @RequestParam String captchaId) {
-        return new ResultUtil<Object>().setData(userService.save(u, null));
-    }
-
 
     //修改用户自己资料
     //用户名密码不会修改 需要通过id获取原用户信息
@@ -46,6 +38,19 @@ public class UserController {
     public Result<Object> editOwn(@ModelAttribute User u) {
         userService.save(u, null);
         return new ResultUtil<Object>().setSuccessMsg("修改成功");
+    }
+
+
+    /**
+     * 修改密码
+     */
+    @RequestMapping(value = "/modifyPass", method = RequestMethod.POST)
+    @RequiresAuthentication
+    public Result<Object> modifyPass(@RequestParam String userId,
+                                     @RequestParam String password,
+                                     @RequestParam String newPass) {
+        userService.modifyPass(userId, password, newPass);
+        return new ResultUtil<Object>().setSuccessMsg("修改密码成功");
     }
 
     /**
@@ -60,18 +65,6 @@ public class UserController {
         return new ResultUtil<Object>().setSuccessMsg("修改成功");
     }
 
-    /**
-     * 修改密码仅允许ADMIN权限改密码
-     */
-    @RequestMapping(value = "/modifyPassByAdmin", method = RequestMethod.POST)
-    @RequiresRoles("admin")
-    public Result<Object> modifyPass(@RequestParam String userId,
-                                     @RequestParam String password,
-                                     @RequestParam String newPass) {
-        userService.modifyPass(userId, password, newPass);
-        return new ResultUtil<Object>().setSuccessMsg("修改密码成功");
-    }
-
 
     //多条件分页获取用户列表
     @RequestMapping(value = "/findByCondition", method = RequestMethod.GET)
@@ -84,8 +77,8 @@ public class UserController {
     //添加用户
     @RequestMapping(value = "/addByAdmin", method = RequestMethod.POST)
     @RequiresRoles("admin")
-    public Result<Object> register(@ModelAttribute User u,
-                                   @RequestParam(required = false) String[] roles) {
+    public Result<Object> addByAdmin(@ModelAttribute User u,
+                                     @RequestParam(required = false) String[] roles) {
         return new ResultUtil<Object>().setData(userService.save(u, roles));
     }
 
