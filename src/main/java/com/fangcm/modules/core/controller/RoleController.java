@@ -3,8 +3,8 @@ package com.fangcm.modules.core.controller;
 import com.fangcm.base.BaseController;
 import com.fangcm.modules.core.entity.Role;
 import com.fangcm.modules.core.service.RoleService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 //角色管理接口
 @RestController
 @RequestMapping("/core/role")
-@PreAuthorize("hasRole('ADMIN')")
+@RequiresRoles("admin")
 public class RoleController extends BaseController<Role, String> {
 
     @Autowired

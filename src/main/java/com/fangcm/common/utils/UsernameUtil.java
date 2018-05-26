@@ -1,6 +1,8 @@
 package com.fangcm.common.utils;
 
 
+import org.apache.shiro.crypto.hash.SimpleHash;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,4 +52,10 @@ public class UsernameUtil {
         }
         return false;
     }
+
+    public static String encrypt(String plaintext) {
+        SimpleHash hash = new SimpleHash("MD5", plaintext, null, 1024);
+        return hash.toHex();
+    }
+
 }

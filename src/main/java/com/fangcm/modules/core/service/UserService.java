@@ -2,6 +2,8 @@ package com.fangcm.modules.core.service;
 
 import com.fangcm.base.BaseService;
 import com.fangcm.common.constant.CommonConstant;
+import com.fangcm.common.utils.JWTUtil;
+import com.fangcm.common.utils.UsernameUtil;
 import com.fangcm.exception.ButterflyException;
 import com.fangcm.modules.core.dao.RoleDao;
 import com.fangcm.modules.core.dao.UserDao;
@@ -10,14 +12,14 @@ import com.fangcm.modules.core.entity.Role;
 import com.fangcm.modules.core.entity.User;
 import com.fangcm.modules.core.entity.UserRole;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,11 +55,11 @@ public class UserService implements BaseService<User, String> {
     }
 
     public User getCurrentUserInfo() {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user == null) {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject == null) {
             return null;
         }
-        String mobile = user.getUsername();
+        String mobile = JWTUtil.getUsername(subject.getPrincipal().toString());
         User u = findByMobile(mobile);
         if (u == null) {
             return null;
@@ -133,7 +135,7 @@ public class UserService implements BaseService<User, String> {
 
         if (old == null) {
             //新建信息
-            String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
+            String encryptPass = UsernameUtil.encrypt(u.getPassword());
             u.setPassword(encryptPass);
         } else {
             //修改信息
@@ -160,11 +162,12 @@ public class UserService implements BaseService<User, String> {
     public void modifyPass(String userId, String password, String newPass) {
         User old = userDao.getOne(userId);
 
-        if (!new BCryptPasswordEncoder().matches(password, old.getPassword())) {
+        SimpleHash hash = new SimpleHash("MD5", password, null, 1024);
+        if (!StringUtils.equalsIgnoreCase(UsernameUtil.encrypt(password), old.getPassword())) {
             throw new ButterflyException("旧密码不正确");
         }
 
-        String newEncryptPass = new BCryptPasswordEncoder().encode(newPass);
+        String newEncryptPass = UsernameUtil.encrypt(newPass);
         old.setPassword(newEncryptPass);
         userDao.save(old);
     }
