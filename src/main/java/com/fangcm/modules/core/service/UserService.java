@@ -69,26 +69,11 @@ public class UserService implements BaseService<User, String> {
         return u;
     }
 
-    public User save(User u, String verify, String captchaId, String[] roles) {
+    public User save(User u, String[] roles) {
         if (u == null) {
             throw new ButterflyException("用户参数错误");
         }
 
-/*
-        if(StringUtils.isBlank(verify)){
-            throw new ButterflyException("必须填写验证码");
-        }
-        //验证码
-        String code=redisTemplate.opsForValue().get(captchaId);
-        if(StrUtil.isBlank(code)){
-            throw new ButterflyException("验证码已过期，请重新获取");
-        }
-
-        if(!verify.toLowerCase().equals(code.toLowerCase())) {
-            log.error("注册失败，验证码错误：code:"+ verify +",redisCode:"+code.toLowerCase());
-            throw new ButterflyException("验证码输入错误");
-        }
-*/
         if (StringUtils.isBlank(u.getMobile())) {
             throw new ButterflyException("必需填写手机号码");
         }
