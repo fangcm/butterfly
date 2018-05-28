@@ -1,5 +1,6 @@
 package com.fangcm.config.security;
 
+import com.fangcm.exception.ButterflyException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,8 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
             try {
                 executeLogin(request, response);
             } catch (Exception e) {
-                response401(request, response);
+                //response401(request, response);
+                throw new ButterflyException(e.getMessage());
             }
         }
         return true;
