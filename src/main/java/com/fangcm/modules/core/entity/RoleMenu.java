@@ -9,20 +9,20 @@ import javax.persistence.Table;
  * Created by FangCM on 2018/5/24.
  */
 @Entity
-@Table(name = "sys_user_role")
-public class UserRole extends BaseEntity {
+@Table(name = "sys_role_menu")
+public class RoleMenu extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    private String userId; //用户id
+    private String menuId; //菜单id
     private String roleId; //角色id
 
-    public String getUserId() {
-        return userId;
+    public String getMenuId() {
+        return menuId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setMenuId(String menuId) {
+        this.menuId = menuId;
     }
 
     public String getRoleId() {

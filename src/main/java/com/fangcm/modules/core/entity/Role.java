@@ -14,9 +14,8 @@ public class Role extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    private String name; //角色名 以ROLE_开头
-    private String title; //角色显示标题
-    private Integer access; //对应权限值 权限菜单所需
+    private String name; //角色名称
+    private String roleCode; //角色代码
 
     public String getName() {
         return name;
@@ -26,20 +25,11 @@ public class Role extends BaseEntity {
         this.name = name;
     }
 
-    public String getTitle() {
-        return title;
+    public String getRoleCode() {
+        return roleCode;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
-
-    public Integer getAccess() {
-        return access;
-    }
-
-    public void setAccess(Integer access) {
-        this.access = access;
-    }
-
 }

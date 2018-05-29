@@ -23,16 +23,10 @@ public class Menu extends BaseEntity {
     @Column(length = 64)
     private String name; //菜单名称
 
-    @NotBlank
-    @Column(length = 64)
-    private String title; //标题
-
     private String icon; //图标
     private String path; //路径
-    private String component; //前端组件
     private Boolean rootLevel; //是否为根级菜单
     private String parentId; //父菜单id
-    private Integer access; //所需权限值
     private Integer sort; //排序（升序）
 
     @Transient
@@ -45,14 +39,6 @@ public class Menu extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getIcon() {
@@ -71,14 +57,6 @@ public class Menu extends BaseEntity {
         this.path = path;
     }
 
-    public String getComponent() {
-        return component;
-    }
-
-    public void setComponent(String component) {
-        this.component = component;
-    }
-
     public Boolean getRootLevel() {
         return rootLevel;
     }
@@ -93,14 +71,6 @@ public class Menu extends BaseEntity {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
-    }
-
-    public Integer getAccess() {
-        return access;
-    }
-
-    public void setAccess(Integer access) {
-        this.access = access;
     }
 
     public Integer getSort() {
