@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * 用户名验证工具类
  */
-public class UsernameUtil {
+public class UserUtil {
 
     /**
      * 由字母数字下划线组成且开头必须是字母，不能超过16位

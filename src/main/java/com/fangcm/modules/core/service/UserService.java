@@ -3,7 +3,7 @@ package com.fangcm.modules.core.service;
 import com.fangcm.base.BaseService;
 import com.fangcm.common.constant.CommonConstant;
 import com.fangcm.common.utils.JWTUtil;
-import com.fangcm.common.utils.UsernameUtil;
+import com.fangcm.common.utils.UserUtil;
 import com.fangcm.exception.ButterflyException;
 import com.fangcm.modules.core.dao.RoleDao;
 import com.fangcm.modules.core.dao.UserDao;
@@ -120,7 +120,7 @@ public class UserService implements BaseService<User, String> {
 
         if (old == null) {
             //新建信息
-            String encryptPass = UsernameUtil.encrypt(u.getPassword());
+            String encryptPass = UserUtil.encrypt(u.getPassword());
             u.setPassword(encryptPass);
         } else {
             //修改信息
@@ -148,11 +148,11 @@ public class UserService implements BaseService<User, String> {
         User old = userDao.getOne(userId);
 
         SimpleHash hash = new SimpleHash("MD5", password, null, 1024);
-        if (!StringUtils.equalsIgnoreCase(UsernameUtil.encrypt(password), old.getPassword())) {
+        if (!StringUtils.equalsIgnoreCase(UserUtil.encrypt(password), old.getPassword())) {
             throw new ButterflyException("旧密码不正确");
         }
 
-        String newEncryptPass = UsernameUtil.encrypt(newPass);
+        String newEncryptPass = UserUtil.encrypt(newPass);
         old.setPassword(newEncryptPass);
         userDao.save(old);
     }
