@@ -36,15 +36,18 @@ public class UserControllerTest {
 
     /* 向/readingList发起一个GET请求 */
     @Test
-    public void homePage() throws Exception {
+    public void login() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                .get("/core/menu/findAll")
+                .post("/core/login")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("username", "13701011234")
+                .param("password", "test1234")
                 .accept(MediaType.APPLICATION_JSON)
         ).andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         String content = mvcResult.getResponse().getContentAsString();
-
+        System.out.println(content);
         Assert.assertTrue("错误，正确的返回值为200", status == 200);
     }
 

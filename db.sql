@@ -17,6 +17,10 @@ CREATE TABLE `sys_user` (
   KEY `idx_mobile` (`mobile`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统-用户信息表';
 
+INSERT INTO sys_user (id,mobile,password,email,nick_name,status,remarks,create_time,create_by,update_time,update_by,del_flag) VALUES 
+('1','13701011234','e08553a037051fb319795cf8096b2d72','fangcm2008@qq.com','老Fang','0','','2018-05-29 14:53:33','','2018-05-29 14:53:37','','0');
+
+
 DROP TABLE IF EXISTS `sys_role`;
 
 CREATE TABLE `sys_role` (
@@ -30,6 +34,9 @@ CREATE TABLE `sys_role` (
   `del_flag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标志（0-正常，1-已删除）',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统-角色表';
+
+INSERT INTO sys_role (id, name, role_code, create_time, create_by, update_time, update_by, del_flag) VALUES 
+('1', '系统管理员', 'admin', '2018-05-29 16:31:42', '', '2018-05-29 16:31:46', '', '0');
 
 DROP TABLE IF EXISTS `sys_user_role`;
 
@@ -45,6 +52,9 @@ CREATE TABLE `sys_user_role` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uni_roleId_userId` (`role_id`,`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统-用户角色表';
+
+INSERT INTO `sys_user_role` (`id`, `user_id`, `role_id`, `create_time`, `create_by`, `update_time`, `update_by`, `del_flag`) VALUES 
+('1', '1', '1', '2018-05-29 16:33:11', '', '2018-05-29 16:33:19', '', '0');
 
 DROP TABLE IF EXISTS `sys_menu`;
 
