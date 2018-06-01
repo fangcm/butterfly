@@ -2,10 +2,15 @@ package com.fangcm.modules.core.controller;
 
 import com.fangcm.common.entity.PageVo;
 import com.fangcm.common.entity.Result;
+import com.fangcm.common.utils.JWTUtil;
 import com.fangcm.common.utils.PageUtil;
 import com.fangcm.common.utils.ResultUtil;
+import com.fangcm.common.utils.UserUtil;
+import com.fangcm.config.security.JWTToken;
 import com.fangcm.modules.core.entity.User;
 import com.fangcm.modules.core.service.UserService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +27,35 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    /**
+     * 登录请求
+     */
+    @PostMapping("/login")
+    public Result<Object> submitLogin(@RequestBody(required = true) User u) {
+        User user = userService.findByMobile(u.getMobile());
+        if (user == null) {
+            return new ResultUtil<Object>().setErrorMsg("没有找到该用户");
+        }
+
+        String secret = UserUtil.encrypt(u.getPassword());
+        if(!StringUtils.equals(secret,user.getPassword())) {
+            return new ResultUtil<Object>().setErrorMsg("密码不正确");
+        }
+
+        JWTToken token = new JWTToken(JWTUtil.sign(u.getMobile(), secret));
+        return new ResultUtil<Object>().setSuccessMsg("登录成功");
+    }
+
+    /**
+     * 退出
+     */
+    @GetMapping(value = "/logout")
+    @RequiresAuthentication
+    public Result<Object> logout() {
+        SecurityUtils.getSubject().logout();
+        return new ResultUtil<Object>().setSuccessMsg("退出成功");
+    }
 
     //获取当前登录用户接口
     @RequestMapping(value = "/currentInfo", method = RequestMethod.GET)
