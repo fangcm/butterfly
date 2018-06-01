@@ -7,6 +7,7 @@ import com.fangcm.common.utils.PageUtil;
 import com.fangcm.common.utils.ResultUtil;
 import com.fangcm.common.utils.UserUtil;
 import com.fangcm.config.security.JWTToken;
+import com.fangcm.modules.core.dto.LoginDTO;
 import com.fangcm.modules.core.entity.User;
 import com.fangcm.modules.core.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -32,19 +33,19 @@ public class UserController {
      * 登录请求
      */
     @PostMapping("/login")
-    public Result<Object> submitLogin(@RequestBody(required = true) User u) {
-        User user = userService.findByMobile(u.getMobile());
+    public Result<Object> submitLogin(@RequestBody(required = true) LoginDTO loginDTO) {
+        User user = userService.findByMobile(loginDTO.getUsername());
         if (user == null) {
             return new ResultUtil<Object>().setErrorMsg("没有找到该用户");
         }
 
-        String secret = UserUtil.encrypt(u.getPassword());
-        if(!StringUtils.equals(secret,user.getPassword())) {
+        String secret = UserUtil.encrypt(loginDTO.getPassword());
+        if (!StringUtils.equals(secret, user.getPassword())) {
             return new ResultUtil<Object>().setErrorMsg("密码不正确");
         }
 
-        JWTToken token = new JWTToken(JWTUtil.sign(u.getMobile(), secret));
-        return new ResultUtil<Object>().setSuccessMsg("登录成功");
+        JWTToken token = new JWTToken(JWTUtil.sign(loginDTO.getUsername(), secret));
+        return new ResultUtil<Object>().setData(token.getCredentials());
     }
 
     /**
