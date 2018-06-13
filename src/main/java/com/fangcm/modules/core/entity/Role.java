@@ -15,7 +15,7 @@ public class Role extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     private String name; //角色名称
-    private String roleCode; //角色代码
+    private String roleCode; //角色代码，具有roleCode的为系统角色
 
     public String getName() {
         return name;

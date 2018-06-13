@@ -11,7 +11,6 @@ import com.fangcm.modules.core.dto.LoginDTO;
 import com.fangcm.modules.core.entity.User;
 import com.fangcm.modules.core.service.UserService;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,15 +47,6 @@ public class UserController {
         return new ResultUtil<Object>().setData(token.getCredentials());
     }
 
-    /**
-     * 退出
-     */
-    @GetMapping(value = "/logout")
-    @RequiresAuthentication
-    public Result<Object> logout() {
-        SecurityUtils.getSubject().logout();
-        return new ResultUtil<Object>().setSuccessMsg("退出成功");
-    }
 
     //获取当前登录用户接口
     @RequestMapping(value = "/currentInfo", method = RequestMethod.GET)
