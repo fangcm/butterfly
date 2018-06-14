@@ -10,8 +10,8 @@ import java.net.UnknownHostException;
 /**
  * Created by FangCM on 2018/5/24.
  */
-public class IpInfoUtil {
-    private static final Logger logger = LoggerFactory.getLogger(IpInfoUtil.class);
+public class IpUtil {
+    private static final Logger logger = LoggerFactory.getLogger(IpUtil.class);
 
     /**
      * 获取客户端IP地址

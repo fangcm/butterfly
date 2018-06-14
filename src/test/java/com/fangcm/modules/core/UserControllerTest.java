@@ -38,8 +38,8 @@ public class UserControllerTest {
     @Test
     public void login() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                .post("/core/login")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .post("/core/user/login")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .param("username", "13701011234")
                 .param("password", "test1234")
                 .accept(MediaType.APPLICATION_JSON)

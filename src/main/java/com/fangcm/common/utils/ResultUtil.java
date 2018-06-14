@@ -5,49 +5,36 @@ import com.fangcm.common.entity.Result;
 /**
  * Created by FangCM on 2018/5/23.
  */
-public class ResultUtil<T> {
+public class ResultUtil {
 
-    private Result<T> result;
-
-    public ResultUtil() {
-        result = new Result<>();
-        result.setSuccess(true);
-        result.setMessage("success");
-        result.setCode(200);
+    public static Result setData(boolean success, Integer code, String msg, Object data) {
+        Result result = new Result();
+        result.setSuccess(success);
+        result.setMessage(msg);
+        result.setCode(code);
+        result.setResult(data);
+        return result;
     }
 
-    public Result<T> setData(T t) {
-        this.result.setResult(t);
-        this.result.setCode(200);
-        return this.result;
+    public static Result setData(Object data, String msg) {
+        return ResultUtil.setData(true, 200, msg, data);
     }
 
-    public Result<T> setSuccessMsg(String msg) {
-        this.result.setSuccess(true);
-        this.result.setMessage(msg);
-        this.result.setCode(200);
-        this.result.setResult(null);
-        return this.result;
+    public static Result setData(Object data) {
+        return ResultUtil.setData(true, 200, "success", data);
     }
 
-    public Result<T> setData(T t, String msg) {
-        this.result.setResult(t);
-        this.result.setCode(200);
-        this.result.setMessage(msg);
-        return this.result;
+
+    public static Result setSuccessMsg(String msg) {
+        return ResultUtil.setData(true, 200, msg, null);
     }
 
-    public Result<T> setErrorMsg(String msg) {
-        this.result.setSuccess(false);
-        this.result.setMessage(msg);
-        this.result.setCode(500);
-        return this.result;
+
+    public static Result setErrorMsg(String msg) {
+        return ResultUtil.setData(false, 500, msg, null);
     }
 
-    public Result<T> setErrorMsg(Integer code, String msg) {
-        this.result.setSuccess(false);
-        this.result.setMessage(msg);
-        this.result.setCode(code);
-        return this.result;
+    public static Result setErrorMsg(Integer code, String msg) {
+        return ResultUtil.setData(false, code, msg, null);
     }
 }

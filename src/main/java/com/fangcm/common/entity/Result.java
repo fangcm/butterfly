@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by FangCM on 2018/5/23.
  */
-public class Result<T> implements Serializable {
+public class Result implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -13,7 +13,7 @@ public class Result<T> implements Serializable {
     private String message; //失败消息
     private Integer code; //返回代码
     private long timestamp = System.currentTimeMillis(); //时间戳
-    private T result; //结果对象
+    private Object result; //结果对象
 
     public boolean isSuccess() {
         return success;
@@ -47,11 +47,11 @@ public class Result<T> implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public T getResult() {
+    public Object getResult() {
         return result;
     }
 
-    public void setResult(T result) {
+    public void setResult(Object result) {
         this.result = result;
     }
 }

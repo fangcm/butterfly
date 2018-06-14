@@ -26,7 +26,7 @@ public class CustomErrorController implements ErrorController {
     private ErrorAttributes errorAttributes;
 
     @RequestMapping(value = PATH, produces = {MediaType.APPLICATION_JSON_VALUE})
-    Result<Object> error(HttpServletRequest request, HttpServletResponse response) {
+    Result error(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> errorAttributes = this.errorAttributes.getErrorAttributes(new ServletWebRequest(request), false);
         Integer status = (Integer) errorAttributes.get("status");
         String path = (String) errorAttributes.get("path");
@@ -35,7 +35,7 @@ public class CustomErrorController implements ErrorController {
         if (!StringUtils.isEmpty(path)) {
             message = String.format("Requested path [%s] with result: %s", path, messageFound);
         }
-        return new ResultUtil<Object>().setErrorMsg(status, message);
+        return ResultUtil.setErrorMsg(status, message);
     }
 
     @Override

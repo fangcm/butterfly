@@ -1,32 +1,20 @@
-package com.fangcm.modules.core.entity;
+package com.fangcm.modules.core.vo;
 
-import com.fangcm.base.BaseEntity;
+import com.fangcm.base.BaseVO;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
+import java.util.List;
 
 /**
- * Created by FangCM on 2018/5/24.
+ * Created by FangCM on 2018/6/13.
  */
-@Entity
-@Table(name = "sys_menu")
-public class Menu extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
-
-    @NotBlank
-    @Column(length = 64)
+public class MenuVO extends BaseVO {
     private String name; //菜单名称
-
     private String icon; //图标
     private String path; //路径
     private Boolean rootLevel; //是否为根级菜单
     private String parentId; //父菜单id
     private Integer sort; //排序（升序）
-
+    private List<MenuVO> children; //二级菜单
 
     public String getName() {
         return name;
@@ -76,4 +64,11 @@ public class Menu extends BaseEntity {
         this.sort = sort;
     }
 
+    public List<MenuVO> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<MenuVO> children) {
+        this.children = children;
+    }
 }

@@ -12,8 +12,7 @@ import java.util.Date;
  * Created by FangCM on 2018/5/23.
  */
 
-@JsonIgnoreProperties(value = {"createTime", "createBy", "updateTime", "updateBy"},
-        allowGetters = true)
+@JsonIgnoreProperties(value = {"createBy", "updateBy"}, allowGetters = true)
 public abstract class BaseVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

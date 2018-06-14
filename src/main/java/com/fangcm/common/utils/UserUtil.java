@@ -19,7 +19,7 @@ public class UserUtil {
     /**
      * 手机号
      */
-    private static final Pattern pMobile = Pattern.compile("^1[3|4|5|8][0-9]\\d{8}$");
+    private static final Pattern pMobile = Pattern.compile("^1[3|4|5|7|8][0-9]\\d{8}$");
 
     /**
      * 邮箱

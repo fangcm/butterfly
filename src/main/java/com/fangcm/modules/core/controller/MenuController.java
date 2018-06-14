@@ -2,47 +2,45 @@ package com.fangcm.modules.core.controller;
 
 import com.fangcm.common.entity.Result;
 import com.fangcm.common.utils.ResultUtil;
-import com.fangcm.modules.core.entity.Menu;
 import com.fangcm.modules.core.service.MenuService;
+import com.fangcm.modules.core.vo.MenuDTO;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.annotation.Resource;
 
 /**
  * Created by FangCM on 2018/5/24.
  */
 
 //菜单管理接口
-//拥有ROLE_ADMIN角色的用户可以访问
 @RestController
 @RequestMapping("/core/menu")
 public class MenuController {
 
-    @Autowired
+    @Resource
     private MenuService menuService;
 
 
     //获取数据
-    @GetMapping("/findAll")
-    public Result<List<Menu>> findAll() {
-        return new ResultUtil<List<Menu>>().setData(menuService.findAll());
+    @GetMapping("/getMenuTree")
+    public Result findAll() {
+        return ResultUtil.setData(menuService.getMenuTree());
     }
 
     //添加 or 编辑
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @PostMapping(value = "/save")
     @RequiresRoles("admin")
-    public Result<Menu> add(@ModelAttribute Menu menu) {
-        return new ResultUtil<Menu>().setData(menuService.save(menu));
+    public Result add(@ModelAttribute MenuDTO param) {
+        return ResultUtil.setData(menuService.save(param));
     }
 
     //批量通过id删除
-    @RequestMapping(value = "/delByIds", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/delById")
     @RequiresRoles("admin")
-    public Result<Object> delByIds(@RequestParam String[] ids) {
-        menuService.delByIds(ids);
-        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
+    public Result delById(@RequestParam String id) {
+        menuService.deleteById(id);
+        return ResultUtil.setSuccessMsg("删除数据成功");
     }
 
 }

@@ -1,4 +1,4 @@
-package com.fangcm.modules.core.dto;
+package com.fangcm.modules.core.vo;
 
 public class LoginDTO {
     private String username;
