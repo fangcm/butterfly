@@ -1,15 +1,13 @@
 package com.fangcm.modules.core.service;
 
-import com.fangcm.base.BaseService;
 import com.fangcm.exception.ButterflyException;
 import com.fangcm.modules.core.dao.RoleDao;
 import com.fangcm.modules.core.dao.UserRoleDao;
-import com.fangcm.modules.core.entity.Role;
 import com.fangcm.modules.core.entity.UserRole;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,20 +15,14 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class RoleService implements BaseService<Role, String> {
+public class RoleService {
 
-    @Autowired
+    @Resource
     private RoleDao roleDao;
 
-    @Autowired
+    @Resource
     private UserRoleDao userRoleDao;
 
-    @Override
-    public RoleDao getRepository() {
-        return roleDao;
-    }
-
-    @Override
     public void delByIds(String[] ids) {
         for (String id : ids) {
             List<UserRole> list = userRoleDao.findByRoleId(id);
