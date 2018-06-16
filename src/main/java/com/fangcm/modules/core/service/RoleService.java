@@ -31,13 +31,13 @@ public class RoleService {
     @Resource
     private UserRoleDao userRoleDao;
 
-    private RoleVO transformToVO(Role data) {
+    public static RoleVO transformToVO(Role data) {
         RoleVO vo = BeanUtil.copy(data, RoleVO.class);
 
         return vo;
     }
 
-    private List<RoleVO> transformToVO(List<Role> dataList) {
+    public static List<RoleVO> transformToVO(List<Role> dataList) {
         List<RoleVO> voList = new ArrayList<>();
         if (dataList != null) {
             for (Role data : dataList) {

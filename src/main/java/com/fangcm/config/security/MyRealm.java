@@ -1,9 +1,10 @@
 package com.fangcm.config.security;
 
 import com.fangcm.common.utils.JWTUtil;
+import com.fangcm.modules.core.dao.RoleDao;
+import com.fangcm.modules.core.dao.UserDao;
 import com.fangcm.modules.core.entity.Role;
 import com.fangcm.modules.core.entity.User;
-import com.fangcm.modules.core.service.UserService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -14,9 +15,9 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
@@ -24,12 +25,11 @@ public class MyRealm extends AuthorizingRealm {
 
     private static final Logger logger = LoggerFactory.getLogger(MyRealm.class);
 
-    private UserService userService;
+    @Resource
+    private UserDao userDao;
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
+    @Resource
+    private RoleDao roleDao;
 
     /**
      * 大坑！，必须重写此方法，不然Shiro会报错
@@ -45,12 +45,12 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = JWTUtil.getUsername(principals.toString());
-        User user = userService.findByMobile(username);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        List<Role> roles = user.getRoles();
+        User user = userDao.findByMobile(username);
+        List<Role> roles = roleDao.findByUserId(user.getId());
         if (roles != null && roles.size() > 0) {
             for (Role role : roles) {
-                simpleAuthorizationInfo.addRole(role.getName());
+                simpleAuthorizationInfo.addRole(role.getRoleCode());
                 //Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));
                 //simpleAuthorizationInfo.addStringPermissions(permission);
             }
@@ -70,7 +70,7 @@ public class MyRealm extends AuthorizingRealm {
             throw new AuthenticationException("token invalid");
         }
 
-        User userBean = userService.findByMobile(username);
+        User userBean = userDao.findByMobile(username);
         if (userBean == null) {
             throw new AuthenticationException("User didn't existed!");
         }

@@ -1,14 +1,11 @@
 package com.fangcm.modules.core.controller;
 
 import com.fangcm.common.rest.Result;
-import com.fangcm.common.utils.JWTUtil;
 import com.fangcm.common.rest.ResultUtil;
-import com.fangcm.common.utils.UserUtil;
-import com.fangcm.config.security.JWTToken;
-import com.fangcm.modules.core.entity.User;
 import com.fangcm.modules.core.service.UserService;
 import com.fangcm.modules.core.vo.LoginDTO;
-import org.apache.commons.lang3.StringUtils;
+import com.fangcm.modules.core.vo.UserDTO;
+import com.fangcm.modules.core.vo.UserFilter;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.data.domain.Pageable;
@@ -33,18 +30,7 @@ public class UserController {
      */
     @PostMapping("/login")
     public Result submitLogin(@ModelAttribute LoginDTO loginDTO) {
-        User user = userService.findByMobile(loginDTO.getUsername());
-        if (user == null) {
-            return ResultUtil.setErrorMsg("没有找到该用户");
-        }
-
-        String secret = UserUtil.encrypt(loginDTO.getPassword());
-        if (!StringUtils.equals(secret, user.getPassword())) {
-            return ResultUtil.setErrorMsg("密码不正确");
-        }
-
-        JWTToken token = new JWTToken(JWTUtil.sign(loginDTO.getUsername(), secret));
-        return ResultUtil.setData(token.getCredentials());
+        return ResultUtil.setData(userService.login(loginDTO));
     }
 
 
@@ -60,8 +46,8 @@ public class UserController {
     //用户名密码不会修改 需要通过id获取原用户信息
     @PostMapping(value = "/editOwn")
     @RequiresAuthentication
-    public Result editOwn(@ModelAttribute User u) {
-        userService.save(u, null);
+    public Result editOwn(@ModelAttribute UserDTO dto) {
+        userService.save(dto, null);
         return ResultUtil.setSuccessMsg("修改成功");
     }
 
@@ -84,9 +70,9 @@ public class UserController {
      */
     @PostMapping(value = "/editByAdmin")
     @RequiresRoles("admin")
-    public Result edit(@ModelAttribute User u,
+    public Result edit(@ModelAttribute UserDTO dto,
                        @RequestParam(required = false) String[] roles) {
-        userService.save(u, roles);
+        userService.save(dto, roles);
         return ResultUtil.setSuccessMsg("修改成功");
     }
 
@@ -94,17 +80,17 @@ public class UserController {
     //多条件分页获取用户列表
     @GetMapping(value = "/findByCondition")
     @RequiresRoles("admin")
-    public Result findByCondition(@ModelAttribute User user, @PageableDefault Pageable pageable) {
-        return ResultUtil.setData(userService.findByCondition(user, pageable));
+    public Result findByCondition(@ModelAttribute UserFilter filter, @PageableDefault Pageable pageable) {
+        return ResultUtil.setData(userService.findByCondition(filter, pageable));
     }
 
 
     //添加用户
     @PostMapping(value = "/addByAdmin")
     @RequiresRoles("admin")
-    public Result addByAdmin(@ModelAttribute User u,
+    public Result addByAdmin(@ModelAttribute UserDTO dto,
                              @RequestParam(required = false) String[] roles) {
-        return ResultUtil.setData(userService.save(u, roles));
+        return ResultUtil.setData(userService.save(dto, roles));
     }
 
 
@@ -128,8 +114,8 @@ public class UserController {
 
     @DeleteMapping(value = "/delById")
     @RequiresRoles("admin")
-    public Result deleteById(@RequestParam String id) {
-        userService.deleteById(id);
+    public Result deleteById(@RequestParam String userId) {
+        userService.deleteById(userId);
         return ResultUtil.setSuccessMsg("删除数据成功");
     }
 }

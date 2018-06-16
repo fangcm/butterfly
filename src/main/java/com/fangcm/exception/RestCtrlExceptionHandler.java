@@ -18,7 +18,7 @@ public class RestCtrlExceptionHandler {
 
     @ExceptionHandler(ButterflyException.class)
     @ResponseStatus(value = HttpStatus.OK)
-    public Result handleXCloudException(ButterflyException e) {
+    public Result handleButterflyException(ButterflyException e) {
         String errorMsg = "Butterfly exception";
         if (e != null) {
             errorMsg = e.getMsg();
@@ -28,7 +28,7 @@ public class RestCtrlExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public Result handleException(Exception e) {
         String errorMsg = "Exception";
         if (e != null) {
@@ -37,4 +37,5 @@ public class RestCtrlExceptionHandler {
         }
         return ResultUtil.setErrorMsg(500, errorMsg);
     }
+
 }

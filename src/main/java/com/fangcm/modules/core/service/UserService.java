@@ -1,17 +1,22 @@
 package com.fangcm.modules.core.service;
 
+import com.fangcm.common.rest.PageUtil;
+import com.fangcm.common.utils.BeanUtil;
 import com.fangcm.common.utils.JWTUtil;
 import com.fangcm.common.utils.UserUtil;
+import com.fangcm.config.security.JWTToken;
 import com.fangcm.exception.ButterflyException;
 import com.fangcm.modules.core.dao.RoleDao;
 import com.fangcm.modules.core.dao.UserDao;
 import com.fangcm.modules.core.dao.UserRoleDao;
-import com.fangcm.modules.core.entity.Role;
 import com.fangcm.modules.core.entity.User;
 import com.fangcm.modules.core.entity.UserRole;
+import com.fangcm.modules.core.vo.LoginDTO;
+import com.fangcm.modules.core.vo.UserDTO;
+import com.fangcm.modules.core.vo.UserFilter;
+import com.fangcm.modules.core.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,52 +46,64 @@ public class UserService {
     @Resource
     private UserRoleDao userRoleDao;
 
-
-    private User fillUserRoles(User user) {
-        List<Role> roleList = roleDao.findByUserId(user.getId());
-        user.setRoles(roleList);
-        return user;
+    private UserVO transformToVO(User data) {
+        UserVO vo = BeanUtil.copy(data, UserVO.class);
+        vo.setRoles(RoleService.transformToVO(roleDao.findByUserId(data.getId())));
+        return vo;
     }
 
-    public User getCurrentUserInfo() {
+    private List<UserVO> transformToVO(List<User> dataList) {
+        List<UserVO> voList = new ArrayList<>();
+        if (dataList != null) {
+            for (User data : dataList) {
+                UserVO vo = transformToVO(data);
+                if (vo != null) {
+                    voList.add(vo);
+                }
+            }
+        }
+        return voList;
+    }
+
+    public UserVO getCurrentUserInfo() {
         Subject subject = SecurityUtils.getSubject();
         if (subject == null) {
             return null;
         }
         String mobile = JWTUtil.getUsername(subject.getPrincipal().toString());
-        User u = findByMobile(mobile);
+        User u = userDao.findByMobile(mobile);
         if (u == null) {
             return null;
         }
 
         u.setPassword(null);
-        return u;
+        return transformToVO(u);
     }
 
-    public User save(User u, String[] roles) {
-        if (u == null) {
+    public UserVO save(UserDTO dto, String[] roles) {
+        if (dto == null) {
             throw new ButterflyException("用户参数错误");
         }
 
-        if (StringUtils.isBlank(u.getMobile())) {
+        if (StringUtils.isBlank(dto.getMobile())) {
             throw new ButterflyException("必需填写手机号码");
         }
-        if (StringUtils.isBlank(u.getNickName())) {
+        if (StringUtils.isBlank(dto.getNickName())) {
             throw new ButterflyException("必需填写昵称");
         }
 
         User old = null;
-        if (StringUtils.isNotBlank(u.getId())) {
+        if (StringUtils.isNotBlank(dto.getId())) {
             //修改信息
-            old = userDao.getOne(u.getId());
+            old = userDao.getOne(dto.getId());
         } else {
             //新建信息
-            if (StringUtils.isBlank(u.getPassword())) {
+            if (StringUtils.isBlank(dto.getPassword())) {
                 throw new ButterflyException("必须填写密码");
             }
         }
 
-        User userByMobile = this.findByMobile(u.getMobile());
+        User userByMobile = userDao.findByMobile(dto.getMobile());
         if (userByMobile != null) {
             if (old == null) {
                 //新建信息
@@ -99,7 +116,7 @@ public class UserService {
             }
         }
 
-        User userByNickName = this.findByNickName(u.getNickName());
+        User userByNickName = userDao.findByNickName(dto.getNickName());
         if (userByNickName != null) {
             if (old == null) {
                 //新建信息
@@ -112,6 +129,7 @@ public class UserService {
             }
         }
 
+        User u = BeanUtil.copy(dto, User.class);
         if (old == null) {
             //新建信息
             String encryptPass = UserUtil.encrypt(u.getPassword());
@@ -135,7 +153,7 @@ public class UserService {
                 }
             }
         }
-        return u;
+        return transformToVO(u);
     }
 
     /**
@@ -145,10 +163,23 @@ public class UserService {
         userDao.deleteById(userId);
     }
 
+    public String login(LoginDTO loginDTO) {
+        User user = userDao.findByMobile(loginDTO.getUsername());
+        if (user == null) {
+            throw new ButterflyException("没有找到该用户");
+        }
+
+        String secret = UserUtil.encrypt(loginDTO.getPassword());
+        if (!StringUtils.equals(secret, user.getPassword())) {
+            throw new ButterflyException("密码不正确");
+        }
+
+        JWTToken token = new JWTToken(JWTUtil.sign(loginDTO.getUsername(), secret));
+        return token.getCredentials().toString();
+    }
+
     public void modifyPass(String userId, String password, String newPass) {
         User old = userDao.getOne(userId);
-
-        SimpleHash hash = new SimpleHash("MD5", password, null, 1024);
         if (!StringUtils.equalsIgnoreCase(UserUtil.encrypt(password), old.getPassword())) {
             throw new ButterflyException("旧密码不正确");
         }
@@ -174,27 +205,9 @@ public class UserService {
         userDao.save(user);
     }
 
-    public User findByMobile(String mobile) {
+    public Page<UserVO> findByCondition(UserFilter filter, Pageable pageable) {
 
-        User user = userDao.findByMobile(mobile);
-        if (user != null) {
-            return fillUserRoles(user);
-        }
-        return null;
-    }
-
-    public User findByNickName(String nickName) {
-
-        User user = userDao.findByNickName(nickName);
-        if (user != null) {
-            return fillUserRoles(user);
-        }
-        return null;
-    }
-
-    public Page<User> findByCondition(User user, Pageable pageable) {
-
-        Page<User> page = userDao.findAll(new Specification<User>() {
+        Page<User> pageData = userDao.findAll(new Specification<User>() {
             @Nullable
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
@@ -208,19 +221,19 @@ public class UserService {
                 list.add(cb.equal(root.get("delFlag"), User.DEL_FLAG_NORMAL));
 
                 //模糊搜素
-                if (StringUtils.isNotBlank(user.getNickName())) {
-                    list.add(cb.like(nickNameField, '%' + user.getNickName() + '%'));
+                if (StringUtils.isNotBlank(filter.getNickName())) {
+                    list.add(cb.like(nickNameField, '%' + filter.getNickName() + '%'));
                 }
-                if (StringUtils.isNotBlank(user.getMobile())) {
-                    list.add(cb.like(mobileField, '%' + user.getMobile() + '%'));
+                if (StringUtils.isNotBlank(filter.getMobile())) {
+                    list.add(cb.like(mobileField, '%' + filter.getMobile() + '%'));
                 }
-                if (StringUtils.isNotBlank(user.getEmail())) {
-                    list.add(cb.like(emailField, '%' + user.getEmail() + '%'));
+                if (StringUtils.isNotBlank(filter.getEmail())) {
+                    list.add(cb.like(emailField, '%' + filter.getEmail() + '%'));
                 }
 
                 //状态
-                if (user.getStatus() != null) {
-                    list.add(cb.equal(statusField, user.getStatus()));
+                if (filter.getStatus() != null) {
+                    list.add(cb.equal(statusField, filter.getStatus()));
                 }
 
                 Predicate[] arr = new Predicate[list.size()];
@@ -229,11 +242,7 @@ public class UserService {
             }
         }, pageable);
 
-        for (User u : page.getContent()) {
-            fillUserRoles(u);
-            u.setPassword(null);
-        }
-        return page;
+        return PageUtil.pageWrap(transformToVO(pageData.getContent()), pageData);
     }
 
 }

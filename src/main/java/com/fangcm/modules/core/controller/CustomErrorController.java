@@ -4,7 +4,6 @@ package com.fangcm.modules.core.controller;
 import com.fangcm.common.rest.Result;
 import com.fangcm.common.rest.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.MediaType;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class CustomErrorController implements ErrorController {
     private static final String PATH = "/error";
 
 
-    @Autowired
+    @Resource
     private ErrorAttributes errorAttributes;
 
     @RequestMapping(value = PATH, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -33,7 +33,7 @@ public class CustomErrorController implements ErrorController {
         String messageFound = (String) errorAttributes.get("message");
         String message = "";
         if (!StringUtils.isEmpty(path)) {
-            message = String.format("Requested path [%s] with result: %s", path, messageFound);
+            message = String.format("%s [%s]", messageFound, path);
         }
         return ResultUtil.setErrorMsg(status, message);
     }
