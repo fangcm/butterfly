@@ -1,6 +1,6 @@
 package com.fangcm.modules.core.dao;
 
-import com.fangcm.base.BaseDao;
+import com.fangcm.common.base.BaseDao;
 import com.fangcm.modules.core.entity.UserRole;
 import org.springframework.stereotype.Repository;
 

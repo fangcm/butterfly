@@ -1,7 +1,5 @@
 package com.fangcm.modules.core.service;
 
-import com.fangcm.base.BaseService;
-import com.fangcm.common.constant.CommonConstant;
 import com.fangcm.common.utils.JWTUtil;
 import com.fangcm.common.utils.UserUtil;
 import com.fangcm.exception.ButterflyException;
@@ -15,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,6 +20,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,21 +30,17 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class UserService implements BaseService<User, String> {
+public class UserService {
 
-    @Autowired
+    @Resource
     private UserDao userDao;
 
-    @Autowired
+    @Resource
     private RoleDao roleDao;
 
-    @Autowired
+    @Resource
     private UserRoleDao userRoleDao;
 
-    @Override
-    public UserDao getRepository() {
-        return userDao;
-    }
 
     private User fillUserRoles(User user) {
         List<Role> roleList = roleDao.findByUserId(user.getId());
@@ -144,6 +138,13 @@ public class UserService implements BaseService<User, String> {
         return u;
     }
 
+    /**
+     * 根据Id删除
+     */
+    public void deleteById(String userId) {
+        userDao.deleteById(userId);
+    }
+
     public void modifyPass(String userId, String password, String newPass) {
         User old = userDao.getOne(userId);
 
@@ -161,7 +162,7 @@ public class UserService implements BaseService<User, String> {
     //后台禁用用户
     public void disable(String userId) {
         User user = userDao.getOne(userId);
-        user.setStatus(CommonConstant.USER_STATUS_DISABLE);
+        user.setStatus(User.USER_STATUS_DISABLE);
         userDao.save(user);
     }
 
@@ -169,7 +170,7 @@ public class UserService implements BaseService<User, String> {
     //后台启用用户
     public void enable(String userId) {
         User user = userDao.getOne(userId);
-        user.setStatus(CommonConstant.USER_STATUS_NORMAL);
+        user.setStatus(User.USER_STATUS_NORMAL);
         userDao.save(user);
     }
 
@@ -204,7 +205,7 @@ public class UserService implements BaseService<User, String> {
                 Path<Integer> statusField = root.get("status");
 
                 List<Predicate> list = new ArrayList<>();
-                list.add(cb.equal(root.get("delFlag"), CommonConstant.DEL_FLAG_NORMAL));
+                list.add(cb.equal(root.get("delFlag"), User.DEL_FLAG_NORMAL));
 
                 //模糊搜素
                 if (StringUtils.isNotBlank(user.getNickName())) {

@@ -1,7 +1,6 @@
 package com.fangcm.modules.core.entity;
 
-import com.fangcm.base.BaseEntity;
-import com.fangcm.common.constant.CommonConstant;
+import com.fangcm.common.base.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +16,9 @@ import java.util.List;
 @Entity
 @Table(name = "sys_user")
 public class User extends BaseEntity {
+    public static final int USER_STATUS_NORMAL = 0; //用户正常状态
+    public static final int USER_STATUS_DISABLE = 1; //用户禁用状态
     private static final long serialVersionUID = 1L;
-
     @NotEmpty
     @Column(length = 11)
     private String mobile;
@@ -30,7 +30,7 @@ public class User extends BaseEntity {
 
     @Column(length = 32)
     private String nickName;
-    private Integer status = CommonConstant.USER_STATUS_NORMAL; //状态 0正常 1禁用
+    private Integer status = USER_STATUS_NORMAL; //状态 0正常 1禁用
     private String remarks;
 
     @Transient

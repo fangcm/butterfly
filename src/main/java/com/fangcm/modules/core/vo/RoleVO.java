@@ -1,21 +1,14 @@
-package com.fangcm.modules.core.entity;
+package com.fangcm.modules.core.vo;
 
-import com.fangcm.common.base.BaseEntity;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import com.fangcm.common.base.BaseVO;
 
 /**
- * Created by FangCM on 2018/5/24.
+ * Created by FangCM on 2018/6/13.
  */
-@Entity
-@Table(name = "sys_role")
-public class Role extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
-
+public class RoleVO extends BaseVO {
     private String name; //角色名称
     private String roleCode; //角色代码，具有roleCode的为系统角色
+
 
     public String getName() {
         return name;

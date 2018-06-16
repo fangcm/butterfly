@@ -1,6 +1,5 @@
-package com.fangcm.base;
+package com.fangcm.common.base;
 
-import com.fangcm.common.constant.CommonConstant;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,9 +16,10 @@ import java.util.Date;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity implements Serializable {
+    public static final int DEL_FLAG_NORMAL = 0; //正常状态
+    public static final int DEL_FLAG_DELETE = 1; //删除标志
 
     private static final long serialVersionUID = 1L;
-
     //唯一标识
     @Id
     @GenericGenerator(name = "idGenerator", strategy = "org.hibernate.id.UUIDGenerator")
@@ -41,7 +41,7 @@ public abstract class BaseEntity implements Serializable {
     private String updateBy; //更新者
 
     @Column(name = "del_flag")
-    private Integer delFlag = CommonConstant.DEL_FLAG_NORMAL; //删除标志 默认0
+    private Integer delFlag = DEL_FLAG_NORMAL; //删除标志 默认0
 
     public String getId() {
         return id;

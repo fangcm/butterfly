@@ -1,6 +1,6 @@
 package com.fangcm.modules.core.entity;
 
-import com.fangcm.base.BaseEntity;
+import com.fangcm.common.base.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

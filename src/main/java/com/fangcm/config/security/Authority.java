@@ -1,4 +1,4 @@
-package com.fangcm.common.entity;
+package com.fangcm.config.security;
 
 
 public class Authority {

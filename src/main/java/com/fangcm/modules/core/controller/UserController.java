@@ -1,10 +1,8 @@
 package com.fangcm.modules.core.controller;
 
-import com.fangcm.common.entity.PageVo;
-import com.fangcm.common.entity.Result;
+import com.fangcm.common.rest.Result;
 import com.fangcm.common.utils.JWTUtil;
-import com.fangcm.common.utils.PageUtil;
-import com.fangcm.common.utils.ResultUtil;
+import com.fangcm.common.rest.ResultUtil;
 import com.fangcm.common.utils.UserUtil;
 import com.fangcm.config.security.JWTToken;
 import com.fangcm.modules.core.entity.User;
@@ -13,6 +11,8 @@ import com.fangcm.modules.core.vo.LoginDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -49,7 +49,7 @@ public class UserController {
 
 
     //获取当前登录用户接口
-    @RequestMapping(value = "/currentInfo", method = RequestMethod.GET)
+    @GetMapping(value = "/currentInfo")
     @RequiresAuthentication
     public Result getUserInfo() {
         return ResultUtil.setData(userService.getCurrentUserInfo());
@@ -58,7 +58,7 @@ public class UserController {
 
     //修改用户自己资料
     //用户名密码不会修改 需要通过id获取原用户信息
-    @RequestMapping(value = "/editOwn", method = RequestMethod.POST)
+    @PostMapping(value = "/editOwn")
     @RequiresAuthentication
     public Result editOwn(@ModelAttribute User u) {
         userService.save(u, null);
@@ -69,7 +69,7 @@ public class UserController {
     /**
      * 修改密码
      */
-    @RequestMapping(value = "/modifyPass", method = RequestMethod.POST)
+    @PostMapping(value = "/modifyPass")
     @RequiresAuthentication
     public Result modifyPass(@RequestParam String userId,
                              @RequestParam String password,
@@ -82,7 +82,7 @@ public class UserController {
      * 修改资料仅允许ADMIN权限
      * 用户名密码不会修改 需要通过id获取原用户信息
      */
-    @RequestMapping(value = "/editByAdmin", method = RequestMethod.POST)
+    @PostMapping(value = "/editByAdmin")
     @RequiresRoles("admin")
     public Result edit(@ModelAttribute User u,
                        @RequestParam(required = false) String[] roles) {
@@ -92,15 +92,15 @@ public class UserController {
 
 
     //多条件分页获取用户列表
-    @RequestMapping(value = "/findByCondition", method = RequestMethod.GET)
+    @GetMapping(value = "/findByCondition")
     @RequiresRoles("admin")
-    public Result findByCondition(@ModelAttribute User user, @ModelAttribute PageVo pageVo) {
-        return ResultUtil.setData(userService.findByCondition(user, PageUtil.initPage(pageVo)));
+    public Result findByCondition(@ModelAttribute User user, @PageableDefault Pageable pageable) {
+        return ResultUtil.setData(userService.findByCondition(user, pageable));
     }
 
 
     //添加用户
-    @RequestMapping(value = "/addByAdmin", method = RequestMethod.POST)
+    @PostMapping(value = "/addByAdmin")
     @RequiresRoles("admin")
     public Result addByAdmin(@ModelAttribute User u,
                              @RequestParam(required = false) String[] roles) {
@@ -109,7 +109,7 @@ public class UserController {
 
 
     //后台禁用用户
-    @RequestMapping(value = "/disable", method = RequestMethod.POST)
+    @PostMapping(value = "/disable")
     @RequiresRoles("admin")
     public Result disable(@RequestParam String userId) {
         userService.disable(userId);
@@ -118,7 +118,7 @@ public class UserController {
 
 
     //后台启用用户
-    @RequestMapping(value = "/enable", method = RequestMethod.POST)
+    @PostMapping(value = "/enable")
     @RequiresRoles("admin")
     public Result enable(@RequestParam String userId) {
         userService.enable(userId);
@@ -126,11 +126,10 @@ public class UserController {
     }
 
 
-    //批量通过ids删除
-    @RequestMapping(value = "/delByIds", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/delById")
     @RequiresRoles("admin")
-    public Result delByIds(@RequestParam String[] ids) {
-        userService.delByIds(ids);
-        return ResultUtil.setSuccessMsg("批量通过id删除数据成功");
+    public Result deleteById(@RequestParam String id) {
+        userService.deleteById(id);
+        return ResultUtil.setSuccessMsg("删除数据成功");
     }
 }

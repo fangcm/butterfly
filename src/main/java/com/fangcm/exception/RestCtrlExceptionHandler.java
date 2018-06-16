@@ -1,7 +1,7 @@
 package com.fangcm.exception;
 
-import com.fangcm.common.entity.Result;
-import com.fangcm.common.utils.ResultUtil;
+import com.fangcm.common.rest.Result;
+import com.fangcm.common.rest.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

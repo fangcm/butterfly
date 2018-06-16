@@ -1,10 +1,13 @@
 package com.fangcm.modules.core.service;
 
 import com.fangcm.common.utils.BeanUtil;
+import com.fangcm.common.rest.PageUtil;
 import com.fangcm.modules.core.dao.MenuDao;
 import com.fangcm.modules.core.entity.Menu;
 import com.fangcm.modules.core.vo.MenuDTO;
 import com.fangcm.modules.core.vo.MenuVO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,17 +25,17 @@ public class MenuService {
     @Resource
     private MenuDao menuDao;
 
-    private MenuVO fillDataVO(Menu data) {
+    private MenuVO transformToVO(Menu data) {
         MenuVO vo = BeanUtil.copy(data, MenuVO.class);
 
         return vo;
     }
 
-    private List<MenuVO> fillDataVO(List<Menu> dataList) {
+    private List<MenuVO> transformToVO(List<Menu> dataList) {
         List<MenuVO> voList = new ArrayList<>();
         if (dataList != null) {
             for (Menu data : dataList) {
-                MenuVO vo = fillDataVO(data);
+                MenuVO vo = transformToVO(data);
                 if (vo != null) {
                     voList.add(vo);
                 }
@@ -46,7 +49,7 @@ public class MenuService {
      */
     public MenuVO save(MenuDTO dto) {
         Menu item = BeanUtil.copy(dto, Menu.class);
-        return fillDataVO(menuDao.save(item));
+        return transformToVO(menuDao.save(item));
     }
 
     /**
@@ -56,12 +59,16 @@ public class MenuService {
         menuDao.deleteById(id);
     }
 
+    public Page<MenuVO> findByPage(Pageable pageable) {
+        Page<Menu> pageData = menuDao.findAll(pageable);
+        return PageUtil.pageWrap(transformToVO(pageData.getContent()), pageData);
+    }
 
     public List<MenuVO> getMenuTree() {
-        List<MenuVO> voList = fillDataVO(menuDao.findRootLevel());
+        List<MenuVO> voList = transformToVO(menuDao.findRootLevel());
         for (MenuVO vo : voList) {
             if (vo.getRootLevel()) {
-                List<MenuVO> children = fillDataVO(menuDao.findByParentId(vo.getId()));
+                List<MenuVO> children = transformToVO(menuDao.findByParentId(vo.getId()));
                 if (children.size() > 0) {
                     vo.setChildren(children);
                 }

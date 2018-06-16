@@ -1,8 +1,8 @@
 package com.fangcm.modules.core.controller;
 
 
-import com.fangcm.common.entity.Result;
-import com.fangcm.common.utils.ResultUtil;
+import com.fangcm.common.rest.Result;
+import com.fangcm.common.rest.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;

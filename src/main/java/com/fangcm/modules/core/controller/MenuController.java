@@ -1,10 +1,12 @@
 package com.fangcm.modules.core.controller;
 
-import com.fangcm.common.entity.Result;
-import com.fangcm.common.utils.ResultUtil;
+import com.fangcm.common.rest.Result;
+import com.fangcm.common.rest.ResultUtil;
 import com.fangcm.modules.core.service.MenuService;
 import com.fangcm.modules.core.vo.MenuDTO;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,6 +23,12 @@ public class MenuController {
     @Resource
     private MenuService menuService;
 
+    //分页获取
+    @RequestMapping(value = "/findByPage", method = RequestMethod.GET)
+    @ResponseBody
+    public Result findByPage(@PageableDefault Pageable pageable) {
+        return ResultUtil.setData(menuService.findByPage(pageable));
+    }
 
     //获取数据
     @GetMapping("/getMenuTree")
@@ -38,7 +46,7 @@ public class MenuController {
     //批量通过id删除
     @DeleteMapping(value = "/delById")
     @RequiresRoles("admin")
-    public Result delById(@RequestParam String id) {
+    public Result deleteById(@RequestParam String id) {
         menuService.deleteById(id);
         return ResultUtil.setSuccessMsg("删除数据成功");
     }

@@ -1,4 +1,4 @@
-package com.fangcm.common.entity;
+package com.fangcm.common.rest;
 
 import java.io.Serializable;
 

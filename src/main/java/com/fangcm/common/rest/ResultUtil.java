@@ -1,6 +1,4 @@
-package com.fangcm.common.utils;
-
-import com.fangcm.common.entity.Result;
+package com.fangcm.common.rest;
 
 /**
  * Created by FangCM on 2018/5/23.

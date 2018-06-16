@@ -1,6 +1,5 @@
-package com.fangcm.base;
+package com.fangcm.common.base;
 
-import com.fangcm.common.constant.CommonConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,7 +29,7 @@ public abstract class BaseVO implements Serializable {
 
     private String updateBy; //更新者
 
-    private Integer delFlag = CommonConstant.DEL_FLAG_NORMAL; //删除标志 默认0
+    private Integer delFlag; //删除标志 默认0
 
     public String getId() {
         return id;

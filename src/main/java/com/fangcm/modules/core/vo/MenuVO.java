@@ -1,6 +1,6 @@
 package com.fangcm.modules.core.vo;
 
-import com.fangcm.base.BaseVO;
+import com.fangcm.common.base.BaseVO;
 
 import java.util.List;
 

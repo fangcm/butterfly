@@ -1,6 +1,6 @@
 package com.fangcm.modules.core.dao;
 
-import com.fangcm.base.BaseDao;
+import com.fangcm.common.base.BaseDao;
 import com.fangcm.modules.core.entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

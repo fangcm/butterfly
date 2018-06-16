@@ -1,4 +1,4 @@
-package com.fangcm.base;
+package com.fangcm.common.base;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

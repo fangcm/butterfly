@@ -1,4 +1,4 @@
-package com.fangcm.common.utils;
+package com.fangcm.common.rest;
 
 import com.google.gson.Gson;
 import org.slf4j.Logger;
