@@ -6,6 +6,7 @@ import com.fangcm.common.utils.JWTUtil;
 import com.fangcm.common.utils.UserUtil;
 import com.fangcm.config.security.JWTToken;
 import com.fangcm.exception.ButterflyException;
+import com.fangcm.exception.UnauthorizedException;
 import com.fangcm.modules.core.dao.RoleDao;
 import com.fangcm.modules.core.dao.UserDao;
 import com.fangcm.modules.core.dao.UserRoleDao;
@@ -166,12 +167,12 @@ public class UserService {
     public String login(LoginDTO loginDTO) {
         User user = userDao.findByMobile(loginDTO.getUsername());
         if (user == null) {
-            throw new ButterflyException("没有找到该用户");
+            throw new UnauthorizedException("没有找到该用户");
         }
 
         String secret = UserUtil.encrypt(loginDTO.getPassword());
         if (!StringUtils.equals(secret, user.getPassword())) {
-            throw new ButterflyException("密码不正确");
+            throw new UnauthorizedException("密码不正确");
         }
 
         JWTToken token = new JWTToken(JWTUtil.sign(loginDTO.getUsername(), secret));

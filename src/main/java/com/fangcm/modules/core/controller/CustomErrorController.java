@@ -6,8 +6,10 @@ import com.fangcm.common.rest.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -43,5 +45,9 @@ public class CustomErrorController implements ErrorController {
         return PATH;
     }
 
-
+    @RequestMapping(path = "/401")
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Result unauthorized() {
+        return ResultUtil.setErrorMsg(401, "Unauthorized");
+    }
 }
