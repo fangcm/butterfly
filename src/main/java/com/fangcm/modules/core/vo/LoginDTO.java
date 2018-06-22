@@ -1,15 +1,15 @@
 package com.fangcm.modules.core.vo;
 
 public class LoginDTO {
-    private String username;
+    private String mobile;
     private String password;
 
-    public String getUsername() {
-        return username;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getPassword() {

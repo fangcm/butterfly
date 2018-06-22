@@ -165,7 +165,7 @@ public class UserService {
     }
 
     public String login(LoginDTO loginDTO) {
-        User user = userDao.findByMobile(loginDTO.getUsername());
+        User user = userDao.findByMobile(loginDTO.getMobile());
         if (user == null) {
             throw new UnauthorizedException("没有找到该用户");
         }
@@ -175,7 +175,7 @@ public class UserService {
             throw new UnauthorizedException("密码不正确");
         }
 
-        JWTToken token = new JWTToken(JWTUtil.sign(loginDTO.getUsername(), secret));
+        JWTToken token = new JWTToken(JWTUtil.sign(loginDTO.getMobile(), secret));
         return token.getCredentials().toString();
     }
 

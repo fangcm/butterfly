@@ -29,7 +29,7 @@ public class UserController {
      * 登录请求
      */
     @PostMapping("/login")
-    public Result submitLogin(@ModelAttribute LoginDTO loginDTO) {
+    public Result submitLogin(@RequestBody LoginDTO loginDTO) {
         return ResultUtil.setData(userService.login(loginDTO));
     }
 
