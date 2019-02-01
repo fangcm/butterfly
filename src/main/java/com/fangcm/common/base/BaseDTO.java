@@ -12,7 +12,7 @@ import java.util.Date;
  */
 
 @JsonIgnoreProperties(value = {"createBy", "updateBy"}, allowGetters = true)
-public abstract class BaseVO implements Serializable {
+public abstract class BaseDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id;

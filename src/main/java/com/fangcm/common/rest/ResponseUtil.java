@@ -17,11 +17,8 @@ public class ResponseUtil {
 
     /**
      * 使用response输出JSON
-     *
-     * @param response
-     * @param resultMap
      */
-    public static void out(ServletResponse response, Map<String, Object> resultMap) {
+    public static void responseOutput(ServletResponse response, Map<String, Object> resultMap) {
 
         PrintWriter out = null;
         try {
@@ -39,24 +36,17 @@ public class ResponseUtil {
         }
     }
 
-    public static Map<String, Object> resultMap(boolean flag, Integer code, String msg) {
-
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("success", flag);
-        resultMap.put("message", msg);
-        resultMap.put("code", code);
-        resultMap.put("timestamp", System.currentTimeMillis());
-        return resultMap;
+    public static Map<String, Object> resultMap(int code, String msg) {
+        return resultMap(code, msg, null);
     }
 
-    public static Map<String, Object> resultMap(boolean flag, Integer code, String msg, Object data) {
-
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("success", flag);
-        resultMap.put("message", msg);
+    public static Map<String, Object> resultMap(int code, String msg, Object data) {
+        Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("code", code);
-        resultMap.put("timestamp", System.currentTimeMillis());
-        resultMap.put("result", data);
+        resultMap.put("message", msg);
+        if (data != null) {
+            resultMap.put("data", data);
+        }
         return resultMap;
     }
 }

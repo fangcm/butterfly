@@ -5,34 +5,27 @@ package com.fangcm.common.rest;
  */
 public class ResultUtil {
 
-    public static Result setData(boolean success, Integer code, String msg, Object data) {
+    public static Result setData(int code, String msg, Object data) {
         Result result = new Result();
-        result.setSuccess(success);
         result.setMessage(msg);
         result.setCode(code);
-        result.setResult(data);
+        result.setData(data);
         return result;
     }
 
-    public static Result setData(Object data, String msg) {
-        return ResultUtil.setData(true, 200, msg, data);
-    }
-
     public static Result setData(Object data) {
-        return ResultUtil.setData(true, 200, "success", data);
+        return ResultUtil.setData(0, "success", data);
     }
 
-
-    public static Result setSuccessMsg(String msg) {
-        return ResultUtil.setData(true, 200, msg, null);
+    public static Result setMessage(String msg) {
+        return ResultUtil.setData(0, msg, null);
     }
 
-
-    public static Result setErrorMsg(String msg) {
-        return ResultUtil.setData(false, 500, msg, null);
+    public static Result setMessage(int code, String msg) {
+        return ResultUtil.setData(code, msg, null);
     }
 
-    public static Result setErrorMsg(Integer code, String msg) {
-        return ResultUtil.setData(false, code, msg, null);
+    public static Result setErrorMsg(ErrorCode errorCode) {
+        return ResultUtil.setData(errorCode.errcode, errorCode.errmsg, null);
     }
 }

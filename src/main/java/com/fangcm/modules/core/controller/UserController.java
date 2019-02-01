@@ -3,9 +3,9 @@ package com.fangcm.modules.core.controller;
 import com.fangcm.common.rest.Result;
 import com.fangcm.common.rest.ResultUtil;
 import com.fangcm.modules.core.service.UserService;
-import com.fangcm.modules.core.vo.LoginDTO;
-import com.fangcm.modules.core.vo.UserDTO;
+import com.fangcm.modules.core.vo.LoginForm;
 import com.fangcm.modules.core.vo.UserFilter;
+import com.fangcm.modules.core.vo.UserForm;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +29,8 @@ public class UserController {
      * 登录请求
      */
     @PostMapping("/login")
-    public Result submitLogin(@RequestBody LoginDTO loginDTO) {
-        return ResultUtil.setData(userService.login(loginDTO));
+    public Result submitLogin(@RequestBody LoginForm loginForm) {
+        return ResultUtil.setData(userService.login(loginForm));
     }
 
 
@@ -46,9 +46,9 @@ public class UserController {
     //用户名密码不会修改 需要通过id获取原用户信息
     @PostMapping(value = "/editOwn")
     @RequiresAuthentication
-    public Result editOwn(@ModelAttribute UserDTO dto) {
-        userService.save(dto, null);
-        return ResultUtil.setSuccessMsg("修改成功");
+    public Result editOwn(@ModelAttribute UserForm form) {
+        userService.save(form, null);
+        return ResultUtil.setMessage("修改成功");
     }
 
 
@@ -61,7 +61,7 @@ public class UserController {
                              @RequestParam String password,
                              @RequestParam String newPass) {
         userService.modifyPass(userId, password, newPass);
-        return ResultUtil.setSuccessMsg("修改密码成功");
+        return ResultUtil.setMessage("修改密码成功");
     }
 
     /**
@@ -70,10 +70,10 @@ public class UserController {
      */
     @PostMapping(value = "/editByAdmin")
     @RequiresRoles("admin")
-    public Result edit(@ModelAttribute UserDTO dto,
+    public Result edit(@ModelAttribute UserForm form,
                        @RequestParam(required = false) String[] roles) {
-        userService.save(dto, roles);
-        return ResultUtil.setSuccessMsg("修改成功");
+        userService.save(form, roles);
+        return ResultUtil.setMessage("修改成功");
     }
 
 
@@ -88,9 +88,9 @@ public class UserController {
     //添加用户
     @PostMapping(value = "/addByAdmin")
     @RequiresRoles("admin")
-    public Result addByAdmin(@ModelAttribute UserDTO dto,
+    public Result addByAdmin(@ModelAttribute UserForm form,
                              @RequestParam(required = false) String[] roles) {
-        return ResultUtil.setData(userService.save(dto, roles));
+        return ResultUtil.setData(userService.save(form, roles));
     }
 
 
@@ -99,7 +99,7 @@ public class UserController {
     @RequiresRoles("admin")
     public Result disable(@RequestParam String userId) {
         userService.disable(userId);
-        return ResultUtil.setSuccessMsg("禁用用户成功");
+        return ResultUtil.setMessage("禁用用户成功");
     }
 
 
@@ -108,7 +108,7 @@ public class UserController {
     @RequiresRoles("admin")
     public Result enable(@RequestParam String userId) {
         userService.enable(userId);
-        return ResultUtil.setSuccessMsg("启用用户成功");
+        return ResultUtil.setMessage("启用用户成功");
     }
 
 
@@ -116,6 +116,6 @@ public class UserController {
     @RequiresRoles("admin")
     public Result deleteById(@RequestParam String userId) {
         userService.deleteById(userId);
-        return ResultUtil.setSuccessMsg("删除数据成功");
+        return ResultUtil.setMessage("删除数据成功");
     }
 }

@@ -4,8 +4,8 @@ import com.fangcm.common.utils.BeanUtil;
 import com.fangcm.common.rest.PageUtil;
 import com.fangcm.modules.core.dao.MenuDao;
 import com.fangcm.modules.core.entity.Menu;
+import com.fangcm.modules.core.vo.MenuForm;
 import com.fangcm.modules.core.vo.MenuDTO;
-import com.fangcm.modules.core.vo.MenuVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,31 +25,31 @@ public class MenuService {
     @Resource
     private MenuDao menuDao;
 
-    private MenuVO transformToVO(Menu data) {
-        MenuVO vo = BeanUtil.copy(data, MenuVO.class);
+    private MenuDTO transformToDTO(Menu data) {
+        MenuDTO dto = BeanUtil.copy(data, MenuDTO.class);
 
-        return vo;
+        return dto;
     }
 
-    private List<MenuVO> transformToVO(List<Menu> dataList) {
-        List<MenuVO> voList = new ArrayList<>();
+    private List<MenuDTO> transformToDTO(List<Menu> dataList) {
+        List<MenuDTO> dtoList = new ArrayList<>();
         if (dataList != null) {
             for (Menu data : dataList) {
-                MenuVO vo = transformToVO(data);
-                if (vo != null) {
-                    voList.add(vo);
+                MenuDTO dto = transformToDTO(data);
+                if (dto != null) {
+                    dtoList.add(dto);
                 }
             }
         }
-        return voList;
+        return dtoList;
     }
 
     /**
      * 保存 or 修改
      */
-    public MenuVO save(MenuDTO dto) {
-        Menu item = BeanUtil.copy(dto, Menu.class);
-        return transformToVO(menuDao.save(item));
+    public MenuDTO save(MenuForm form) {
+        Menu item = BeanUtil.copy(form, Menu.class);
+        return transformToDTO(menuDao.save(item));
     }
 
     /**
@@ -59,22 +59,22 @@ public class MenuService {
         menuDao.deleteById(id);
     }
 
-    public Page<MenuVO> findByPage(Pageable pageable) {
+    public Page<MenuDTO> findByPage(Pageable pageable) {
         Page<Menu> pageData = menuDao.findAll(pageable);
-        return PageUtil.pageWrap(transformToVO(pageData.getContent()), pageData);
+        return PageUtil.pageWrap(transformToDTO(pageData.getContent()), pageData);
     }
 
-    public List<MenuVO> getMenuTree() {
-        List<MenuVO> voList = transformToVO(menuDao.findRootLevel());
-        for (MenuVO vo : voList) {
-            if (vo.getRootLevel()) {
-                List<MenuVO> children = transformToVO(menuDao.findByParentId(vo.getId()));
+    public List<MenuDTO> getMenuTree() {
+        List<MenuDTO> dtoList = transformToDTO(menuDao.findRootLevel());
+        for (MenuDTO dto : dtoList) {
+            if (dto.getRootLevel()) {
+                List<MenuDTO> children = transformToDTO(menuDao.findByParentId(dto.getId()));
                 if (children.size() > 0) {
-                    vo.setChildren(children);
+                    dto.setChildren(children);
                 }
             }
         }
-        return voList;
+        return dtoList;
     }
 
 }

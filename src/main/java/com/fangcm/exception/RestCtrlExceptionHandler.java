@@ -1,5 +1,6 @@
 package com.fangcm.exception;
 
+import com.fangcm.common.rest.ErrorCode;
 import com.fangcm.common.rest.Result;
 import com.fangcm.common.rest.ResultUtil;
 import org.apache.shiro.ShiroException;
@@ -23,14 +24,14 @@ public class RestCtrlExceptionHandler {
     @ExceptionHandler(ShiroException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public Result handle401(ShiroException e) {
-        return ResultUtil.setErrorMsg(401, "Unauthorized");
+        return ResultUtil.setErrorMsg(ErrorCode.UNAUTHORIZED);
     }
 
     // 捕捉UnauthorizedException
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public Result handle401() {
-        return ResultUtil.setErrorMsg(401, "Unauthorized");
+        return ResultUtil.setErrorMsg(ErrorCode.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ButterflyException.class)
@@ -41,7 +42,7 @@ public class RestCtrlExceptionHandler {
             errorMsg = e.getMsg();
             logger.warn(e.toString());
         }
-        return ResultUtil.setErrorMsg(500, errorMsg);
+        return ResultUtil.setMessage(500, errorMsg);
     }
 
     @ExceptionHandler(Exception.class)
@@ -52,7 +53,7 @@ public class RestCtrlExceptionHandler {
             errorMsg = e.getMessage();
             logger.warn(e.toString());
         }
-        return ResultUtil.setErrorMsg(getStatus(request).value(), errorMsg);
+        return ResultUtil.setMessage(getStatus(request).value(), errorMsg);
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {

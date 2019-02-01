@@ -1,20 +1,21 @@
 package com.fangcm.modules.core.vo;
 
-import com.fangcm.common.base.BaseVO;
-
-import java.util.List;
-
-/**
- * Created by FangCM on 2018/6/13.
- */
-public class MenuVO extends BaseVO {
+public class MenuForm {
+    private String id;
     private String name; //菜单名称
     private String icon; //图标
     private String path; //路径
     private Boolean rootLevel; //是否为根级菜单
     private String parentId; //父菜单id
     private Integer sort; //排序（升序）
-    private List<MenuVO> children; //二级菜单
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -62,13 +63,5 @@ public class MenuVO extends BaseVO {
 
     public void setSort(Integer sort) {
         this.sort = sort;
-    }
-
-    public List<MenuVO> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<MenuVO> children) {
-        this.children = children;
     }
 }

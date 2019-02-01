@@ -12,10 +12,10 @@ import com.fangcm.modules.core.dao.UserDao;
 import com.fangcm.modules.core.dao.UserRoleDao;
 import com.fangcm.modules.core.entity.User;
 import com.fangcm.modules.core.entity.UserRole;
-import com.fangcm.modules.core.vo.LoginDTO;
-import com.fangcm.modules.core.vo.UserDTO;
+import com.fangcm.modules.core.vo.LoginForm;
+import com.fangcm.modules.core.vo.UserForm;
 import com.fangcm.modules.core.vo.UserFilter;
-import com.fangcm.modules.core.vo.UserVO;
+import com.fangcm.modules.core.vo.UserDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -47,26 +47,26 @@ public class UserService {
     @Resource
     private UserRoleDao userRoleDao;
 
-    private UserVO transformToVO(User data) {
-        UserVO vo = BeanUtil.copy(data, UserVO.class);
-        vo.setRoles(RoleService.transformToVO(roleDao.findByUserId(data.getId())));
-        return vo;
+    private UserDTO transformToDTO(User data) {
+        UserDTO dto = BeanUtil.copy(data, UserDTO.class);
+        dto.setRoles(RoleService.transformToDTO(roleDao.findByUserId(data.getId())));
+        return dto;
     }
 
-    private List<UserVO> transformToVO(List<User> dataList) {
-        List<UserVO> voList = new ArrayList<>();
+    private List<UserDTO> transformToDTO(List<User> dataList) {
+        List<UserDTO> dtoList = new ArrayList<>();
         if (dataList != null) {
             for (User data : dataList) {
-                UserVO vo = transformToVO(data);
-                if (vo != null) {
-                    voList.add(vo);
+                UserDTO dto = transformToDTO(data);
+                if (dto != null) {
+                    dtoList.add(dto);
                 }
             }
         }
-        return voList;
+        return dtoList;
     }
 
-    public UserVO getCurrentUserInfo() {
+    public UserDTO getCurrentUserInfo() {
         Subject subject = SecurityUtils.getSubject();
         if (subject == null) {
             return null;
@@ -78,10 +78,10 @@ public class UserService {
         }
 
         u.setPassword(null);
-        return transformToVO(u);
+        return transformToDTO(u);
     }
 
-    public UserVO save(UserDTO dto, String[] roles) {
+    public UserDTO save(UserForm dto, String[] roles) {
         if (dto == null) {
             throw new ButterflyException("用户参数错误");
         }
@@ -154,7 +154,7 @@ public class UserService {
                 }
             }
         }
-        return transformToVO(u);
+        return transformToDTO(u);
     }
 
     /**
@@ -164,18 +164,18 @@ public class UserService {
         userDao.deleteById(userId);
     }
 
-    public String login(LoginDTO loginDTO) {
-        User user = userDao.findByMobile(loginDTO.getMobile());
+    public String login(LoginForm loginForm) {
+        User user = userDao.findByMobile(loginForm.getMobile());
         if (user == null) {
             throw new UnauthorizedException("没有找到该用户");
         }
 
-        String secret = UserUtil.encrypt(loginDTO.getPassword());
+        String secret = UserUtil.encrypt(loginForm.getPassword());
         if (!StringUtils.equals(secret, user.getPassword())) {
             throw new UnauthorizedException("密码不正确");
         }
 
-        JWTToken token = new JWTToken(JWTUtil.sign(loginDTO.getMobile(), secret));
+        JWTToken token = new JWTToken(JWTUtil.sign(loginForm.getMobile(), secret));
         return token.getCredentials().toString();
     }
 
@@ -206,7 +206,7 @@ public class UserService {
         userDao.save(user);
     }
 
-    public Page<UserVO> findByCondition(UserFilter filter, Pageable pageable) {
+    public Page<UserDTO> findByCondition(UserFilter filter, Pageable pageable) {
 
         Page<User> pageData = userDao.findAll(new Specification<User>() {
             @Nullable
@@ -243,7 +243,7 @@ public class UserService {
             }
         }, pageable);
 
-        return PageUtil.pageWrap(transformToVO(pageData.getContent()), pageData);
+        return PageUtil.pageWrap(transformToDTO(pageData.getContent()), pageData);
     }
 
 }

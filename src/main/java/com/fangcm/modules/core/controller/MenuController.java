@@ -3,7 +3,7 @@ package com.fangcm.modules.core.controller;
 import com.fangcm.common.rest.Result;
 import com.fangcm.common.rest.ResultUtil;
 import com.fangcm.modules.core.service.MenuService;
-import com.fangcm.modules.core.vo.MenuDTO;
+import com.fangcm.modules.core.vo.MenuForm;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -39,7 +39,7 @@ public class MenuController {
     //添加 or 编辑
     @PostMapping(value = "/save")
     @RequiresRoles("admin")
-    public Result add(@ModelAttribute MenuDTO param) {
+    public Result add(@ModelAttribute MenuForm param) {
         return ResultUtil.setData(menuService.save(param));
     }
 
@@ -48,7 +48,7 @@ public class MenuController {
     @RequiresRoles("admin")
     public Result deleteById(@RequestParam String id) {
         menuService.deleteById(id);
-        return ResultUtil.setSuccessMsg("删除数据成功");
+        return ResultUtil.setMessage("删除数据成功");
     }
 
 }

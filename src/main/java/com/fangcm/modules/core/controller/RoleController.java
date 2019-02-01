@@ -3,7 +3,7 @@ package com.fangcm.modules.core.controller;
 import com.fangcm.common.rest.Result;
 import com.fangcm.common.rest.ResultUtil;
 import com.fangcm.modules.core.service.RoleService;
-import com.fangcm.modules.core.vo.RoleDTO;
+import com.fangcm.modules.core.vo.RoleForm;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -29,15 +29,15 @@ public class RoleController {
     //保存 or 更新
     @PostMapping(value = "/save")
     @ResponseBody
-    public Result save(@ModelAttribute RoleDTO dto) {
-        return ResultUtil.setData(roleService.save(dto));
+    public Result save(@ModelAttribute RoleForm form) {
+        return ResultUtil.setData(roleService.save(form));
     }
 
     @DeleteMapping(value = "/delById")
     @ResponseBody
     public Result deleteById(@RequestParam String id) {
         roleService.deleteById(id);
-        return ResultUtil.setSuccessMsg("批量通过id删除数据成功");
+        return ResultUtil.setMessage("批量通过id删除数据成功");
     }
 
     //分页获取

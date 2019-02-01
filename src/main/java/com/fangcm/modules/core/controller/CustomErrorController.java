@@ -1,6 +1,7 @@
 package com.fangcm.modules.core.controller;
 
 
+import com.fangcm.common.rest.ErrorCode;
 import com.fangcm.common.rest.Result;
 import com.fangcm.common.rest.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +38,7 @@ public class CustomErrorController implements ErrorController {
         if (!StringUtils.isEmpty(path)) {
             message = String.format("%s [%s]", messageFound, path);
         }
-        return ResultUtil.setErrorMsg(status, message);
+        return ResultUtil.setMessage(status, message);
     }
 
     @Override
@@ -48,6 +49,6 @@ public class CustomErrorController implements ErrorController {
     @RequestMapping(path = "/401")
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public Result unauthorized() {
-        return ResultUtil.setErrorMsg(401, "Unauthorized");
+        return ResultUtil.setErrorMsg(ErrorCode.UNAUTHORIZED);
     }
 }
