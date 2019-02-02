@@ -79,7 +79,7 @@ public class UserController {
 
     //多条件分页获取用户列表
     @GetMapping(value = "/findByCondition")
-    @RequiresRoles("admin")
+    //@RequiresRoles("admin")
     public Result findByCondition(@ModelAttribute UserFilter filter, @PageableDefault Pageable pageable) {
         return ResultUtil.setData(userService.findByCondition(filter, pageable));
     }
