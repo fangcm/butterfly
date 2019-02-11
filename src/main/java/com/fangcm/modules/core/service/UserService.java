@@ -12,10 +12,7 @@ import com.fangcm.modules.core.dao.UserDao;
 import com.fangcm.modules.core.dao.UserRoleDao;
 import com.fangcm.modules.core.entity.User;
 import com.fangcm.modules.core.entity.UserRole;
-import com.fangcm.modules.core.vo.LoginForm;
-import com.fangcm.modules.core.vo.UserForm;
-import com.fangcm.modules.core.vo.UserFilter;
-import com.fangcm.modules.core.vo.UserDTO;
+import com.fangcm.modules.core.vo.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -164,7 +161,7 @@ public class UserService {
         userDao.deleteById(userId);
     }
 
-    public String login(LoginForm loginForm) {
+    public LoginDTO login(LoginForm loginForm) {
         User user = userDao.findByMobile(loginForm.getMobile());
         if (user == null) {
             throw new UnauthorizedException("没有找到该用户");
@@ -176,7 +173,11 @@ public class UserService {
         }
 
         JWTToken token = new JWTToken(JWTUtil.sign(loginForm.getMobile(), secret));
-        return token.getCredentials().toString();
+
+        LoginDTO dto = new LoginDTO();
+        dto.setToken(token.getCredentials().toString());
+        dto.setUser(transformToDTO(user));
+        return dto;
     }
 
     public void modifyPass(String userId, String password, String newPass) {
